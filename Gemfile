@@ -30,6 +30,8 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "haml-rails", "~> 2.0"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -56,6 +58,7 @@ group :development, :test do
   gem "rspec-rails"
   gem 'factory_bot_rails'
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'rails-controller-testing'
 end
 
 group :development do
