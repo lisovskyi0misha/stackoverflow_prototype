@@ -35,6 +35,8 @@ gem 'html2haml'
 
 gem 'devise'
 
+gem "bootstrap_form", "~> 5.1"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

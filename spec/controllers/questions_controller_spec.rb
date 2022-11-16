@@ -2,11 +2,12 @@ require 'rails_helper'
 
 describe QuestionsController do
 
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user_id: user.id) }
 
   describe 'GET #index' do
 
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2, user_id: user.id) }
     before { get :index }
 
     it 'fills array with question objects' do
@@ -19,10 +20,24 @@ describe QuestionsController do
   end
 
   describe 'GET #show' do
+    
+    let(:answers) { question.answers }
+    before { create_list(:answer, 3, question_id: question.id, user_id: question.user_id) }
     before { get :show, params: { id: question.id } }
 
     it 'finds object for show' do
       expect(assigns(:question)).to eq(question)
+    end
+
+    it 'finds object for answers' do
+      answers.reload
+      expect(assigns(:answers)).to match_array(answers)
+    end
+
+
+    it 'creates new answer' do
+      answers = question.answers.build
+      expect(assigns(:answer)).to be_a_new(Answer)
     end
     
     it 'renders show' do
@@ -31,7 +46,7 @@ describe QuestionsController do
   end
 
   describe 'GET #new' do
-
+    sign_in_user
     before { get :new }
 
     it 'creates new object' do
@@ -44,7 +59,7 @@ describe QuestionsController do
   end
 
   describe 'GET #edit' do
-
+    sign_in_user
     before { get :edit, params: { id: question.id } }
 
     it 'finds object for edit' do
@@ -57,13 +72,15 @@ describe QuestionsController do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'saves new question to db' do
-        expect { post :create, params: {question: attributes_for(:question)} }.to change(Question, :count).by(1)
+        expect { post :create, params: {question: {user_id: user.id, body: 'Some body', title: 'Some title'}} }.to change(Question, :count).by(1)
       end
 
       it 'redirects to index' do
-        post :create, params: {question: attributes_for(:question)}
+        post :create, params: {question: {user_id: user.id, body: 'Some body', title: 'Some title'}}
         expect(response).to redirect_to questions_path
       end
     end
@@ -82,10 +99,12 @@ describe QuestionsController do
   end
 
   describe 'PUT #update' do
+    sign_in_user
+
     context 'with valid attributes' do
 
       it 'finds object for update' do
-        put :update, params: {id: question.id, question: attributes_for(:question)}
+        put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
         expect(assigns(:question)).to eq(question)
       end
 
@@ -97,7 +116,7 @@ describe QuestionsController do
       end
 
       it 'redirects to show' do
-        put :update, params: {id: question.id, question: attributes_for(:question)}
+        put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
         expect(response).to redirect_to question_path(question)
       end
     end
@@ -105,13 +124,13 @@ describe QuestionsController do
     context 'with invalid attributes' do
 
       it 'finds object for update' do
-        put :update, params: {id: question.id, question: attributes_for(:question)}
+        put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
         expect(assigns(:question)).to eq(question)
       end
 
       it 'does`t update question' do
         put :update, params: {id: question.id, question: attributes_for(:invalid_question)}
-        expect({title: question.title, body: question.body}).to eq(attributes_for(:question))
+        expect({title: question.title, body: question.body, user_id: user.id}).to eq(attributes_for(:question, user_id: user.id))
       end
 
       it 're-render edit' do
@@ -123,6 +142,8 @@ describe QuestionsController do
   end
 
   describe 'DELETE #destroy' do
+    sign_in_user
+    
     it 'finds object for delete' do
       delete :destroy, params: {id: question.id}
       expect(assigns(:question)).to eq(question)

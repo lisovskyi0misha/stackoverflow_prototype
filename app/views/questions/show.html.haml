@@ -1,0 +1,15 @@
+%h1=@question.title
+%p=@question.body
+
+%h2 Answers:
+-@answers.each do |answer|
+  %p=answer.body 
+  -if answer.user_id == current_user&.id 
+    %p=button_to 'Delete answer', answer_path(id: answer.id), method: :delete 
+
+
+%h4 Create new answer 
+=bootstrap_form_for @answer, url: answers_path, method: :POST do |f|
+  =f.text_field :body, label: 'Answer'
+  =f.hidden_field :question_id, value: @question.id
+  =f.submit 'Send answer'

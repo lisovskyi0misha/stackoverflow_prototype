@@ -2,46 +2,63 @@ require 'rails_helper'
 
 describe AnswersController do
 
-  describe 'GET #new' do
-
-    before { get :new }
-
-    it 'creates new answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new' do
-      expect(response).to render_template :new
-    end
-  end
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user_id: user.id) }
+  sign_in_user
 
   describe 'POST #create' do
     context 'with valid attributes' do
 
-      let(:question) { create(:question) }
-
       it 'creates answer' do
-        expect { post :create, params: {answer: {body: 'Some body', question_id: question.id}} }.to change(Answer, :count).by(1)
+        expect { post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}} }.to change(Answer, :count).by(1)
       end
 
-      it 'redirects to index' do
-        post :create, params: {answer: {body: 'Some body', question_id: question.id}}
-        expect(response).to redirect_to answers_path
+      it 'redirects to question page' do
+        post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}}
+        expect(response).to redirect_to question_path(id: question.id)
       end
     end
 
     context 'with invalid attributes' do
 
-      let(:question) { create(:question) }
-
       it 'creates answer' do
         expect { post :create, params: {answer: {body: nil, question_id: question.id}} }.to_not change(Answer, :count)
       end
 
-      it 're-renders new' do
+      it 'redirects to question page' do
         post :create, params: {answer: {body: nil, question_id: question.id}}
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response).to render_template :new
+        expect(response).to redirect_to question_path(id: question.id)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
+    context 'user`s own answer' do
+
+      it 'finds answer' do
+        delete :destroy, params: {id: answer.id}
+        expect(assigns(:answer)).to eq(answer)
+      end
+
+      it 'deletes answer' do
+        answer
+        expect { delete :destroy, params: {id: answer.id} }.to change(Answer, :count).by(-1)
+      end
+  end
+    context 'other user`s answer' do
+      let(:user_with_answer) { create(:user) }
+      let(:another_person_question) { create(:question, user_id: user_with_answer.id)}
+      let(:another_person_answer) { create(:answer, question_id: another_person_question.id, user_id: user_with_answer.id)}
+
+      it 'finds answer' do
+        delete :destroy, params: {id: answer.id}
+        expect(assigns(:answer)).to eq(answer)
+      end
+
+      it 'doesn`t delete answer' do
+        another_person_answer
+        expect { delete :destroy, params: {id: another_person_answer.id} }.to_not change(Answer, :count)
       end
     end
   end

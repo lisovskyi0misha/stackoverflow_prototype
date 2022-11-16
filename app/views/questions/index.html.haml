@@ -1,0 +1,5 @@
+-@questions.each do |question|
+  %p=question.title
+  %p=link_to 'Details', question_path(id: question.id)
+
+= link_to 'Create Question', new_question_path

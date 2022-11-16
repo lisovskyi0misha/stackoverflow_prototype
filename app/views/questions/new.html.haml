@@ -1,0 +1,5 @@
+= bootstrap_form_for @question, url: questions_path, method: :POST do |f|
+  =f.text_field :title
+  =f.text_field :body
+  =f.hidden_field :user_id, value: current_user.id 
+  =f.submit 'Create'
