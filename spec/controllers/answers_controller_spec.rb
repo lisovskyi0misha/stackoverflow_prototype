@@ -10,7 +10,11 @@ describe AnswersController do
     context 'with valid attributes' do
 
       it 'creates answer' do
-        expect { post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}} }.to change(Answer, :count).by(1)
+        expect { post :create, params: {answer: {
+          body: 'Some body',
+          question_id: question.id,
+          user_id: question.user_id
+          }} }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to question page' do
@@ -22,7 +26,7 @@ describe AnswersController do
     context 'with invalid attributes' do
 
       it 'creates answer' do
-        expect { post :create, params: {answer: {body: nil, question_id: question.id}} }.to_not change(Answer, :count)
+        expect { post :create, params: {answer: {body: nil, question_id: question.id}} }.to_not change(question.answers, :count)
       end
 
       it 'redirects to question page' do
@@ -43,7 +47,7 @@ describe AnswersController do
 
       it 'deletes answer' do
         answer
-        expect { delete :destroy, params: {id: answer.id} }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: {id: answer.id} }.to change(question.answers, :count).by(-1)
       end
   end
     context 'other user`s answer' do
@@ -58,7 +62,7 @@ describe AnswersController do
 
       it 'doesn`t delete answer' do
         another_person_answer
-        expect { delete :destroy, params: {id: another_person_answer.id} }.to_not change(Answer, :count)
+        expect { delete :destroy, params: {id: another_person_answer.id} }.to_not change(question.answers, :count)
       end
     end
   end
