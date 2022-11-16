@@ -2,9 +2,6 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!, only: [:create, :destroy]
 
-  def index
-  end
-
   def create
     @answer = Answer.new(answer_params)
     @answer.user_id = current_user.id
