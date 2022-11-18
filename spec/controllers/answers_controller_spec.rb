@@ -14,11 +14,11 @@ describe AnswersController do
           body: 'Some body',
           question_id: question.id,
           user_id: question.user_id
-          }} }.to change(question.answers, :count).by(1)
+          }}, xhr: true }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to question page' do
-        post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}}
+        post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}}, xhr: true 
         expect(response).to redirect_to question_path(id: question.id)
       end
     end
@@ -26,11 +26,11 @@ describe AnswersController do
     context 'with invalid attributes' do
 
       it 'creates answer' do
-        expect { post :create, params: {answer: {body: nil, question_id: question.id}} }.to_not change(question.answers, :count)
+        expect { post :create, params: {answer: {body: nil, question_id: question.id}}, xhr: true  }.to_not change(question.answers, :count)
       end
 
       it 'redirects to question page' do
-        post :create, params: {answer: {body: nil, question_id: question.id}}
+        post :create, params: {answer: {body: nil, question_id: question.id}}, xhr: true 
         expect(response).to redirect_to question_path(id: question.id)
       end
     end

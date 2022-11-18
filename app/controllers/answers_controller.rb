@@ -10,7 +10,10 @@ class AnswersController < ApplicationController
     else
       flash[:error] = @answer.errors.full_messages.join(', ')
     end
-    redirect_to question_path(id: @answer.question_id)
+    # respond_to do |format|
+    #   format.js
+    #  end
+    # redirect_to question_path(id: @answer.question_id)
   end
 
   def destroy
