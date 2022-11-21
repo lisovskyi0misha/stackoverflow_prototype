@@ -4,7 +4,9 @@
   =render 'answers'
 
 %h4 Create new answer 
-=bootstrap_form_for [@question, @answer], method: :POST, remote: true do |f|
+=form_for question_answers_path(@question, format: :js), method: :POST do |f|
   =f.text_field :body, label: 'Answer'
   =f.hidden_field :question_id, value: @question.id
   =f.submit 'Send answer'
+
+=button_to 'Create', question_answers_path(@question, format: :js), method: :POST, remote: true
