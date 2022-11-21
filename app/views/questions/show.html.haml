@@ -1,10 +1,10 @@
 %h1=@question.title
 %p=@question.body
-
-=render 'answers'
+.answers
+  =render 'answers'
 
 %h4 Create new answer 
-=bootstrap_form_for @answer, url: answers_path, method: :POST, remote: true do |f|
+=bootstrap_form_for [@question, @answer], method: :POST, remote: true do |f|
   =f.text_field :body, label: 'Answer'
   =f.hidden_field :question_id, value: @question.id
   =f.submit 'Send answer'

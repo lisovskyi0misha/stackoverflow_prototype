@@ -11,7 +11,6 @@ module AcceptanceMacros
     click_on 'Details'
     fill_in 'Answer', with: 'Some answer body'
     click_on 'Send answer'
-    save_and_open_page
     expect(page).to have_content('Some answer body')
   end
 
