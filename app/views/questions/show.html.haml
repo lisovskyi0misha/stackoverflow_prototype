@@ -1,12 +1,9 @@
 %h1=@question.title
 %p=@question.body
-.answers
-  =render 'answers'
 
 %h4 Create new answer 
-=form_for @answer, url: question_answers_path(@question), method: :POST do |f|
-  =f.text_field :body, label: 'Answer'
-  =f.hidden_field :question_id, value: @question.id
-  =f.submit 'Send answer'
-
-=button_to 'Create', question_answers_path(@question, format: :js), method: :POST, remote: true
+=render partial: 'form', locals: { answer: @answer }
+%h2 Answers:
+#answers
+  -@question.answers.each do |answer|
+    =render partial: 'answer', locals: {answer: answer }

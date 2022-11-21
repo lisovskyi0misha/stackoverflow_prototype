@@ -1,0 +1,10 @@
+
+<%= turbo_stream.replace 'new_answer' do %>
+  <%= render partial: 'questions/form', locals: { answer: Answer.new } %>
+
+<% end %>
+
+
+<%= turbo_stream.prepend 'answers' do %>
+  <%= render partial: 'questions/answer', locals: {answer: @answer} %>
+<% end %>
