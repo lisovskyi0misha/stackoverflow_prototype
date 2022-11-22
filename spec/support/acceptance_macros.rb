@@ -11,7 +11,6 @@ module AcceptanceMacros
     click_on 'Details'
     fill_in 'Your answer', with: 'Some answer body'
     click_on 'Send answer'
-    expect(page).to have_content('Some answer body')
   end
 
   def test_question_answers(question, answers)

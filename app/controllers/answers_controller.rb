@@ -16,21 +16,16 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    respond_to do |format| 
-      @answer = Answer.find_by_id(params[:id])
-      if @answer.user_id == current_user.id
-        @answer.destroy
-        @question = Question.includes(:answers).find_by_id(params[:question_id])
-        format.turbo_stream
-      end
-      # redirect_to question_path(id: @answer.question_id)
+    @answer = Answer.find_by_id(params[:id])
+    if @answer.user_id == current_user.id
+      @answer.destroy
     end
+    redirect_to question_path(id: @answer.question_id)
   end
 
   private
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id, :user_id)
+    params.require(:answer).permit(:body, :user_id)
   end
-
 end

@@ -65,6 +65,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'rails-controller-testing'
   gem "turbo-rails"
+  gem 'database_cleaner'
 end
 
 group :development do
