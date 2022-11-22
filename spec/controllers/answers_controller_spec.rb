@@ -12,26 +12,29 @@ describe AnswersController do
       it 'creates answer' do
         expect { post :create, params: {answer: {
           body: 'Some body',
-          question_id: question.id,
           user_id: question.user_id
-          }} }.to change(question.answers, :count).by(1)
+          }, question_id: question.id}, as: :turbo_stream }.to change(question.answers, :count).by(1)
       end
 
       it 'renders question page' do
         post :create, params: {answer: {body: 'Some body', user_id: question.user_id}, question_id: question.id }, as: :turbo_stream
-        expect(response).to render 'questions/show'
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
 
       it 'creates answer' do
-        expect { post :create, params: {answer: {body: nil, question_id: question.id}}, xhr: true  }.to_not change(question.answers, :count)
+        expect { 
+          post :create, 
+          params: {answer: {body: nil, user_id: question.user_id}, question_id: question.id} 
+        }.to_not change(question.answers, :count)
       end
 
-      it 'redirects to question page' do
-        post :create, params: {answer: {body: nil, question_id: question.id}}, xhr: true 
-        expect(response).to redirect_to question_path(id: question.id)
+      it 're-renders question`s` show page' do
+        post :create, params: {answer: {body: nil}, question_id: question.id }
+        expect(response).to render_template 'questions/show'
+        expect(response).to have_http_status(422)
       end
     end
   end

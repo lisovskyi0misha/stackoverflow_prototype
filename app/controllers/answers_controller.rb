@@ -9,7 +9,6 @@ class AnswersController < ApplicationController
       if @answer.valid?
         format.turbo_stream
       else
-        @question = Question.includes(:answers).find_by_id(params[:question_id])
         flash[:error] = @answer.errors.full_messages.join(', ')
         format.html { render 'questions/show', status: 422 }
       end
