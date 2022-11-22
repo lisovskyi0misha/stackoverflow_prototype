@@ -1,9 +1,10 @@
-%h1=@question.title
-%p=@question.body
+%h1= @question.title
+%p= @question.body
 
-%h4 Create new answer 
-=render partial: 'form', locals: { answer: @answer }
 %h2 Answers:
 #answers
-  -@question.answers.each do |answer|
-    =render partial: 'answer', locals: {answer: answer }
+  - @question.answers.each do |answer|
+    = render partial: 'questions/answer', locals: {answer: answer }
+
+%h4 Create new answer 
+= render partial: 'questions/form', locals: { answer: @answer }

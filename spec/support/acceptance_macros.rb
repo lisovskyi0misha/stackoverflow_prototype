@@ -9,7 +9,7 @@ module AcceptanceMacros
   def send_answer
     visit questions_path
     click_on 'Details'
-    fill_in 'Answer', with: 'Some answer body'
+    fill_in 'Your answer', with: 'Some answer body'
     click_on 'Send answer'
     expect(page).to have_content('Some answer body')
   end

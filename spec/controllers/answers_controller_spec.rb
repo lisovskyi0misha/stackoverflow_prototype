@@ -6,7 +6,7 @@ describe AnswersController do
   let(:question) { create(:question, user_id: user.id) }
   sign_in_user
 
-  describe 'POST #create' do
+  describe 'POST #create', turbo: true do
     context 'with valid attributes' do
 
       it 'creates answer' do
@@ -14,12 +14,12 @@ describe AnswersController do
           body: 'Some body',
           question_id: question.id,
           user_id: question.user_id
-          }}, xhr: true }.to change(question.answers, :count).by(1)
+          }} }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to question page' do
-        post :create, params: {answer: {body: 'Some body', question_id: question.id, user_id: question.user_id}}, xhr: true 
-        expect(response).to redirect_to question_path(id: question.id)
+      it 'renders question page' do
+        post :create, params: {answer: {body: 'Some body', user_id: question.user_id}, question_id: question.id }, as: :turbo_stream
+        expect(response).to render 'questions/show'
       end
     end
 
