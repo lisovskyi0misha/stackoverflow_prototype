@@ -2,7 +2,7 @@ require_relative '../acceptance_helper'
 
 feature 'Delete answer', %q{
   Users can delete only their own answers
-  } do
+  }, js: true do
   given(:user_with_answer) { create(:user) }
   given(:user_without_answer) { create(:user) }
   given(:question) { create(:question,  user_id: user_with_answer.id) }
