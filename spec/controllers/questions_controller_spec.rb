@@ -96,24 +96,50 @@ describe QuestionsController do
     sign_in_user
 
     context 'with valid attributes' do
+      context 'user`s own question' do
 
-      it 'finds object for update' do
-        put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
-        expect(assigns(:question)).to eq(question)
+        it 'finds object for update' do
+          put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
+          expect(assigns(:question)).to eq(question)
+        end
+
+        it 'updates question' do
+          put :update, params: {id: question.id, question: {title: 'changed title', body: 'changed body'}}
+          question.reload
+          expect(question.title).to eq 'changed title'
+          expect(question.body).to eq 'changed body'
+        end
+
+        it 'redirects to show' do
+          put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
+          expect(response).to redirect_to question_path(question)
+        end
       end
 
-      it 'updates question' do
-        put :update, params: {id: question.id, question: {title: 'changed title', body: 'changed body'}}
-        question.reload
-        expect(question.title).to eq 'changed title'
-        expect(question.body).to eq 'changed body'
-      end
+      context 'other`s` question' do
+        let(:author) { create(:user) }
+        let(:authors_question) { create(:question, user_id: author.id)}
 
-      it 'redirects to show' do
-        put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
-        expect(response).to redirect_to question_path(question)
+        it 'finds object for update' do
+          put :update, params: {id: authors_question.id, question: attributes_for(:question, user_id: author.id)}
+          expect(assigns(:question)).to eq(authors_question)
+        end
+
+        it 'doesn`t update question' do
+          put :update, params: {id: authors_question.id, question: {title: 'changed title', body: 'changed body'}}
+          authors_question.reload
+          expect(authors_question.title).to_not eq 'changed title'
+          expect(authors_question.body).to_not eq 'changed body'
+        end
+
+        it 'redirects to show' do
+          put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
+          expect(response).to redirect_to question_path(question)
+        end
       end
     end
+
+     
 
     context 'with invalid attributes' do
 

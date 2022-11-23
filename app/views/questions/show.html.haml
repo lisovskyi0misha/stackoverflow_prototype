@@ -1,5 +1,8 @@
-%h1= @question.title
-%p= @question.body
+.question 
+  %h1= @question.title
+  %p= @question.body
+  - if @question.user_id == current_user&.id 
+    = link_to 'Edit answer', edit_question_path(@question)
 
 %h2 Answers:
 #answers

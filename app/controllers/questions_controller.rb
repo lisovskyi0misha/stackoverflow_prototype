@@ -30,6 +30,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    if @question.user_id != current_user&.id
+      redirect_to question_path(@question)
+      return
+    end
     @question.update(question_params)
     if @question.valid?
       redirect_to question_path(@question)
