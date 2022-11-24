@@ -34,12 +34,7 @@ class QuestionsController < ApplicationController
       redirect_to question_path(@question)
       return
     end
-    @question.update(question_params)
-    if @question.valid?
-      redirect_to question_path(@question)
-    else
-      render :edit, status: :unprocessable_entity
-    end
+    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: :unprocessable_entity)
   end
 
   def destroy

@@ -11,15 +11,15 @@ feature 'edit question', %q{
     authorize(author)
     visit question_path(question)
     within '.question' do
-      click_on 'Edit answer'
+      click_on 'Edit'
     end
-    fill_in 'Title', with: 'Edited answer title'
-    fill_in 'Content', with: 'Edited answer content'
+    fill_in 'Title', with: 'Edited question title'
+    fill_in 'Content', with: 'Edited question content'
     click_on 'Update'
     expect(current_path).to eq(question_path(question))
     within '.question' do
-      expect(page).to have_content('Edited answer title')
-      expect(page).to have_content('Edited answer content')
+      expect(page).to have_content('Edited question title')
+      expect(page).to have_content('Edited question content')
     end
     
   end
@@ -28,14 +28,14 @@ feature 'edit question', %q{
     authorize(user_without_question)
     visit question_path(question)
     within '.question' do
-      expect(page).to_not have_content('Edit answer')
+      expect(page).to_not have_content('Edit')
     end
   end
 
   scenario 'Non-authenticated user tries to edit question' do
     visit question_path(question)
     within '.question' do
-      expect(page).to_not have_content('Edit answer')
+      expect(page).to_not have_content('Edit')
     end
   end
 end

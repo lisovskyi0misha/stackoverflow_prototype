@@ -66,6 +66,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem "turbo-rails"
   gem 'database_cleaner'
+  gem "capybara-webkit"
+  gem 'webrick'
 end
 
 group :development do
@@ -82,7 +84,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  # gem "selenium-webdriver"
   gem "webdrivers"
   gem 'shoulda-matchers', '~> 5.0'
   gem 'launchy'

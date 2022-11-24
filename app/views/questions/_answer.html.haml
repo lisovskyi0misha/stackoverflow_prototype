@@ -2,4 +2,5 @@
   %p= answer.body 
   - if answer.user_id == current_user&.id
     - if answer.id.present?
+      %p= link_to 'Edit answer', edit_question_answer_path(id: answer.id, question_id: answer.question_id)
       %p= button_to 'Delete answer', question_answer_path(id: answer.id, question_id: answer.question_id), method: :delete
