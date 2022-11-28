@@ -18,4 +18,11 @@ module AcceptanceMacros
     expect(page).to have_content(question.title)
     answers.each { |answer| expect(page).to have_content(answer.body) }
   end
+
+  def prepare_for_delete_best(user)
+    authorize(user)
+    question.best_answer = answer
+    question.save
+    visit question_path(question)
+  end
 end

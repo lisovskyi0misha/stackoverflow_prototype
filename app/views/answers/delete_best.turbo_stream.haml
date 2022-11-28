@@ -1,0 +1,5 @@
+= turbo_stream.remove 'best-answer' do
+  = render partial: 'questions/answer', locals: { answer: @old_best_answer, best: true }
+
+= turbo_stream.append 'answers' do
+  = render partial: 'questions/answer', locals: { answer: @old_best_answer, best: false }

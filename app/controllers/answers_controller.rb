@@ -1,10 +1,10 @@
 class AnswersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best]
   before_action :find_answer, except: [:create]
 
   def create
-    @question = Question.includes(:answers).find_by_id(params[:question_id])
+    @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
     @answer = @question.answers.create(answer_params)
     respond_to do |format|
       if @answer.valid?
@@ -42,6 +42,22 @@ class AnswersController < ApplicationController
     end
   end
 
+  def choose_best
+    @old_best_answer = @question.best_answer
+    return redirect_to question_path(@question) unless @question.user_id == current_user.id
+    @question.best_answer = @answer
+    @question.save
+    respond_to { |format| format.turbo_stream }
+  end
+
+  def delete_best
+    @old_best_answer = Answers::DeleteBest.new(@answer, current_user).call
+    respond_to { |format| format.turbo_stream }
+  rescue StandardError => e
+    flash[:error] = e.message
+    render 'questions/show', status: 422
+  end
+
   private
 
   def answer_params
@@ -49,6 +65,7 @@ class AnswersController < ApplicationController
   end
 
   def find_answer
-    @answer = Answer.find_by_id(params[:id])
+    @answer = Answer.includes(:question).find_by_id(params[:id])
+    @question = @answer.question
   end
 end

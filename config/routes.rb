@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root to: 'questions#index'
   resources :questions do
-    resources :answers, except: [:new, :index, :show]
+    resources :answers, except: [:new, :index, :show] do
+      post :choose_best, on: :member
+      delete :delete_best, on: :member
+    end
   end
   # Defines the root path route ("/")
   # root "articles#index"

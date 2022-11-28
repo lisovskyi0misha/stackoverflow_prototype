@@ -1,7 +1,11 @@
 require 'rails_helper'
-require Rails.root.join('spec/acceptance/support/capybara_config.rb')
 
 RSpec.configure do |config|
+
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  end
+
   config.use_transactional_fixtures = false
 
   config.include AcceptanceMacros, type: :feature
