@@ -73,6 +73,16 @@ describe QuestionsController do
         expect { post :create, params: {question: {user_id: user.id, body: 'Some body', title: 'Some title'}} }.to change(Question, :count).by(1)
       end
 
+      it 'saves file to db' do
+        post :create, params: {question: {
+          user_id: user.id,
+          body: 'Some body',
+          title: 'Some title',
+          files: [fixture_file_upload('test_file.txt', 'text/plain')]
+          }}
+        expect(assigns(:question).files.first.blob.filename).to eq('test_file.txt')
+      end
+
       it 'redirects to index' do
         post :create, params: {question: {user_id: user.id, body: 'Some body', title: 'Some title'}}
         expect(response).to redirect_to questions_path
@@ -108,6 +118,15 @@ describe QuestionsController do
           question.reload
           expect(question.title).to eq 'changed title'
           expect(question.body).to eq 'changed body'
+        end
+
+        it 'saves file to db' do
+          put :update, params: {id: question.id, question: {
+            body: 'Changed body',
+            title: 'Changed title',
+            files: [fixture_file_upload('test_file.txt', 'text/plain')]
+            }}
+          expect(assigns(:question).files.first.blob.filename).to eq('test_file.txt')
         end
 
         it 'redirects to show' do

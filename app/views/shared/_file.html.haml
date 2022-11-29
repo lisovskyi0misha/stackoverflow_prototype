@@ -1,0 +1,4 @@
+- if file.image?
+  = image_tag file.variant(resize_to_limit: [100, nil]).processed.url
+- else
+  = link_to file.filename, rails_blob_path(file)
