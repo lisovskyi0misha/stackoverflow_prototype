@@ -10,6 +10,7 @@ feature 'Create question' do
     click_on 'Create Question'
     fill_in 'Title', with: 'Test question title'
     fill_in 'Body', with: 'Test question body'
+    attach_file, 'File', "#{Rails.root}/spec/acceptance/answers/edit_answer_spec.rb"
     click_on 'Create'
 
     expect(page).to have_content 'Your question was successfully created'
