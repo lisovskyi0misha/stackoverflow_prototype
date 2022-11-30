@@ -14,7 +14,7 @@ feature 'Create question' do
     click_on 'Create'
 
     expect(page).to have_content 'Your question was successfully created'
-    visit question_path(id: 1)
+    visit question_path(id: Question.first.id)
     expect(page).to have_link('edit_answer_spec.rb')
   end
 

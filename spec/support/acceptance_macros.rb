@@ -10,6 +10,7 @@ module AcceptanceMacros
     visit questions_path
     click_on 'Details'
     fill_in 'Your answer', with: 'Some answer body'
+    attach_file 'File', "#{Rails.root}/spec/acceptance/answers/edit_answer_spec.rb"
     click_on 'Send answer'
   end
 
