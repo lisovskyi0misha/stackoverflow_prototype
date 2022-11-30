@@ -1,4 +1,4 @@
-%div{ id: "file_#{file.id}"}
+%div{ id: "file_#{file.id}", class: 'file' }
   - if file.image?
     = image_tag file.variant(resize_to_limit: [500, nil])
   - else
