@@ -1,6 +1,6 @@
-= bootstrap_form_for answer, url: question_answers_path(question_id: answer.question_id), method: :POST do |f|
-  =f.text_field :body, label: 'Answer'
-  =f.hidden_field :user_id, value: answer.question.user_id
+= bootstrap_form_for answer, url: question_answers_path(@question), method: :POST do |f|
+  =f.text_field :body, label: 'Your answer'
+  =f.hidden_field :user_id, value: current_user.id
   .file-fields
     = f.file_field :files, multiple: true
   =f.submit 'Send answer'
