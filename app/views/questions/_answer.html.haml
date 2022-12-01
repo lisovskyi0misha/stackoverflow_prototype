@@ -1,7 +1,7 @@
 - if answer&.id.present?
-  -# -binding.break
   -if best
     #best-answer
+      = render partial: 'shared/votes', locals: { object: answer }
       %p Best answer
       %p= answer.body
       - if answer.files.attached?
@@ -11,6 +11,7 @@
   - else
     =turbo_frame_tag answer do
       .answer-card
+        = render partial: 'shared/votes', locals: { object: answer }
         %p= answer.body
         - if answer.files.attached?
           - answer.files.each do |file|

@@ -1,0 +1,4 @@
+.votes
+  %p= "Rate: #{ object.rate }"
+  -unless owner?(object.user_id)
+    = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(object, @user_votes), answer: object }

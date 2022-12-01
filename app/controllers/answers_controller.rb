@@ -60,6 +60,7 @@ class AnswersController < ApplicationController
 
   def vote
     @answer.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@answer.user_id)
+    redirect_to question_path(@answer.question)
   end
 
   private

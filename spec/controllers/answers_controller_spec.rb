@@ -197,6 +197,11 @@ describe AnswersController do
       it 'saves vote to db' do
         expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to change(authors_answer.votes.liked, :count).by(1)
       end
+
+      it 'redirects to question`s show' do
+        put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }
+        expect(response).to redirect_to question_path(authors_question)
+      end
     end
 
     context 'user tries to vote for other`s answer twice' do
