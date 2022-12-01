@@ -58,6 +58,10 @@ class AnswersController < ApplicationController
     render 'questions/show', status: 422
   end
 
+  def vote
+
+  end
+
   private
 
   def answer_params

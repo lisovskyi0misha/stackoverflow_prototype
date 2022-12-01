@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: 'questions#index'
   resources :questions do
     resources :answers, except: [:new, :index, :show] do
+      put :vote, on: :member
       post :choose_best, on: :member
       delete :delete_best, on: :member
     end

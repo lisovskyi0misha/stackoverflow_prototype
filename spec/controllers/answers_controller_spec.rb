@@ -186,4 +186,21 @@ describe AnswersController do
       end
     end
   end
+
+  describe 'PUT #vote' do
+
+    it 'finds answer' do
+      put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'like' }
+      expect(assigns(:answer)).to eq(answer)
+    end
+    context 'authorized user tries to vote for the answer' do
+      it 'saves like to db' do
+        expect { put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'like' } }.to change(answer.likes, :count).by(1)
+      end
+    end
+
+    context 'non-authorized user tries to vote for the answer'
+
+    context 'authorized user tries to vote for his own answer'
+  end
 end
