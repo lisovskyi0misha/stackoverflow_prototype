@@ -190,17 +190,28 @@ describe AnswersController do
   describe 'PUT #vote' do
 
     it 'finds answer' do
-      put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'like' }
-      expect(assigns(:answer)).to eq(answer)
+      put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }
+      expect(assigns(:answer)).to eq(authors_answer)
     end
-    context 'authorized user tries to vote for the answer' do
-      it 'saves like to db' do
-        expect { put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'like' } }.to change(answer.likes, :count).by(1)
+    context 'user tries to vote for other`s answer once' do
+      it 'saves vote to db' do
+        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to change(authors_answer.votes.liked, :count).by(1)
       end
     end
 
-    context 'non-authorized user tries to vote for the answer'
+    context 'user tries to vote for other`s answer twice' do
+      it 'saves only one vote to a db' do
+        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to change(authors_answer.votes.liked, :count).by(1)
+        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to_not change(authors_answer.votes.liked, :count)
+      end 
+    end
 
-    context 'authorized user tries to vote for his own answer'
+    context 'user tries to vote for his own answer' do
+      it 'dosen`t vote like to db' do
+        expect { put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'liked' } }.to_not change(answer.votes.liked, :count)
+      end
+    end
+
+
   end
 end

@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best]
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
   before_action :find_answer, except: [:create]
 
   def create
@@ -59,7 +59,7 @@ class AnswersController < ApplicationController
   end
 
   def vote
-
+    @answer.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@answer.user_id)
   end
 
   private

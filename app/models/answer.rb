@@ -3,5 +3,5 @@ class Answer < ApplicationRecord
   belongs_to :question
   has_many_attached :files
   has_many :votes
-  has_many :voted_users, through: :votes
+  has_many :voted_users, -> { distinct }, through: :votes
 end
