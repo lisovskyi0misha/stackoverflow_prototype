@@ -26,6 +26,20 @@ feature 'vote for answer', %{
     end
   end
 
+  scenario 'Authenticated user tries to dislike an answer' do
+    authorize(user)
+    answer
+    visit question_path(question)
+    within '#answers' do
+      click_on 'Dislike'
+    end
+    within '.votes' do
+      expect(page).to have_content('-1')
+      expect(page).to have_button('Like', disabled: true)
+      expect(page).to have_button('Dislike', disabled: true)
+    end
+  end
+
   scenario 'Non-authenticated user tries to like the answer' do
     answer
     vote
@@ -35,7 +49,6 @@ feature 'vote for answer', %{
       expect(page).to have_button('Like', disabled: true)
       expect(page).to have_button('Dislike', disabled: true)
     end
-
   end
 
   scenario 'Authenticated user tries to vote his own answer' do
