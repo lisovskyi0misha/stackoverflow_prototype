@@ -3,14 +3,13 @@ require_relative '../acceptance_helper'
 feature 'vote for answer', %{
   Authenticated user can vote either if he likes answer or dislike answer
   User can vote only once for each answer
-  User can re-vote for answer if he want
   User can`t vote for his own answer`
 }, js: true do
   given(:user) { create(:user) }
   given(:author) { create(:user) }
   given(:question) { create(:question, user_id: author.id) }
   given(:answer) { create(:answer, user_id: author.id, question_id: question.id) }
-  given(:vote) { create(:vote, user_id: author.id, answer_id: answer.id) }
+  given(:vote) { create(:vote, user_id: author.id, votable_id: answer.id, votable_type: 'Answer') }
 
   scenario 'Authenticated user tries to like the answer' do
     authorize(user)
