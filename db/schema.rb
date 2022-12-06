@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_01_112325) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_06_181046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,12 +76,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_112325) do
 
   create_table "votes", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "answer_id", null: false
+    t.bigint "votable_id", null: false
     t.integer "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["answer_id"], name: "index_votes_on_answer_id"
+    t.string "votable_type", null: false
     t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["votable_id", "votable_type", "user_id"], name: "index_votes_on_votable_id_and_votable_type_and_user_id", unique: true
+    t.index ["votable_id"], name: "index_votes_on_votable_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -89,6 +91,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_112325) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
   add_foreign_key "questions", "users"
-  add_foreign_key "votes", "answers"
+  add_foreign_key "votes", "answers", column: "votable_id"
   add_foreign_key "votes", "users"
 end
