@@ -1,0 +1,4 @@
+= turbo_stream.update "rate-number-#{@answer.id}" do
+  = "Rate: #{@answer.rate}"
+= turbo_stream.update "vote-buttons-#{@answer.id}" do
+  =render partial: 'shared/vote_buttons', locals: { disabled: true, path: {id: @answer.id, question_id: @answer.question_id} }

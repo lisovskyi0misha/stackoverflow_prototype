@@ -190,30 +190,40 @@ describe AnswersController do
   describe 'PUT #vote' do
 
     it 'finds answer' do
-      put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }
+      put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }, as: :turbo_stream
       expect(assigns(:answer)).to eq(authors_answer)
     end
     context 'user tries to vote for other`s answer once' do
       it 'saves vote to db' do
-        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to change(authors_answer.votes.liked, :count).by(1)
+        expect { 
+          put :vote, 
+          params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' },
+          as: :turbo_stream 
+        }.to change(authors_answer.votes.liked, :count).by(1)
       end
 
-      it 'redirects to question`s show' do
-        put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }
-        expect(response).to redirect_to question_path(authors_question)
+      it 'renders vote' do
+        put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' }, as: :turbo_stream
+        expect(response).to render_template :vote
       end
     end
 
     context 'user tries to vote for other`s answer twice' do
       it 'saves only one vote to a db' do
-        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to change(authors_answer.votes.liked, :count).by(1)
-        expect { put :vote, params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' } }.to_not change(authors_answer.votes.liked, :count)
+        expect { put :vote,
+          params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' },
+          as: :turbo_stream }.to change(authors_answer.votes.liked, :count).by(1)
+        expect { put :vote,
+          params: {question_id: authors_answer.question_id, id: authors_answer.id, vote: 'liked' },
+          as: :turbo_stream }.to_not change(authors_answer.votes.liked, :count)
       end 
     end
 
     context 'user tries to vote for his own answer' do
       it 'dosen`t vote like to db' do
-        expect { put :vote, params: {question_id: answer.question_id, id: answer.id, vote: 'liked' } }.to_not change(answer.votes.liked, :count)
+        expect { put :vote,
+          params: {question_id: answer.question_id, id: answer.id, vote: 'liked' },
+          as: :turbo_stream }.to_not change(answer.votes.liked, :count)
       end
     end
 

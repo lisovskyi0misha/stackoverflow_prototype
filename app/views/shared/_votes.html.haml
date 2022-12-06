@@ -1,4 +1,5 @@
 .votes
-  %p= "Rate: #{ object.rate }"
+  %p{id: "rate-number-#{object.id}"}= "Rate: #{object.rate}"
   -unless owner?(object.user_id)
-    = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(object, @user_votes), answer: object }
+    %div{ id: "vote-buttons-#{object.id}" }
+      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(object, @user_votes), path: {id: object.id, question_id: object.question_id} }

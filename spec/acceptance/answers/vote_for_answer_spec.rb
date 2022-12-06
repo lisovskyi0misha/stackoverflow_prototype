@@ -5,7 +5,7 @@ feature 'vote for answer', %{
   User can vote only once for each answer
   User can re-vote for answer if he want
   User can`t vote for his own answer`
-} do
+}, js: true do
   given(:user) { create(:user) }
   given(:author) { create(:user) }
   given(:question) { create(:question, user_id: author.id) }
@@ -19,7 +19,6 @@ feature 'vote for answer', %{
     within '#answers' do
       click_on 'Like'
     end
-    # save_and_open_page
     within '.votes' do
       expect(page).to have_content('1')
       expect(page).to have_button('Like', disabled: true)
