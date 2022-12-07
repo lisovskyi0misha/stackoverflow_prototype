@@ -5,3 +5,4 @@ import * as bootstrap from "bootstrap"
 import './add_jquery'
 import './fields/add_fields_to_answer'
 import './fields/add_fields_to_question'
+import "./channels"
