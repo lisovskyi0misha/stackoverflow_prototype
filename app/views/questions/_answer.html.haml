@@ -11,7 +11,7 @@
   - else
     =turbo_frame_tag answer do
       .answer-card
-        = render partial: 'shared/votes', locals: { object: answer }
+        = render partial: 'shared/votes', locals: { object: answer, path: {id: object.id, question_id: object.question_id} }
         %p= answer.body
         - if answer.files.attached?
           - answer.files.each do |file|

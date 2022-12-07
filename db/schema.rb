@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_06_181046) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_07_095209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_181046) do
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
   add_foreign_key "questions", "users"
-  add_foreign_key "votes", "answers", column: "votable_id"
   add_foreign_key "votes", "users"
 end

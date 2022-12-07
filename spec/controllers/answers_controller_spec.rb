@@ -187,7 +187,7 @@ describe AnswersController do
     end
   end
 
-  describe 'PUT #vote' do
+  describe 'POST #vote' do
 
     it 'finds answer' do
       answers_vote_request(authors_answer)
@@ -219,7 +219,7 @@ describe AnswersController do
 
     context 'user tries to vote for his own answer' do
       it 'dosen`t vote like to db' do
-        expect {answers_vote_request(answer) }.to_not change(answer.votes.liked, :count)
+        expect { answers_vote_request(answer) }.to_not change(answer, :rate)
       end
     end
   end

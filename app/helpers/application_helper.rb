@@ -14,9 +14,9 @@ module ApplicationHelper
     end
   end
 
-  def has_vote?(answer, users)
+  def has_vote?(object)
     return true if current_user.nil?
-    answer.voted_users.ids.include?(current_user.id)
+    object.voted_users.ids.include?(current_user.id)
   end
 
   def owner?(object_user_id)

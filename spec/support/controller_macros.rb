@@ -34,5 +34,9 @@ module ControllerMacros
     def answers_vote_request(answer, action='liked')
       post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
     end
+
+    def questions_vote_request(question, action='liked')
+      post :vote, params: { id: question.id, vote: action }, as: :turbo_stream
+    end 
   end
 end

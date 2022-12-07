@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy]
+  before_action :find_question, only: [:edit, :update, :destroy, :vote]
   before_action :find_question_with_answers, only: [:show]
 
   def index
@@ -41,6 +41,11 @@ class QuestionsController < ApplicationController
   def destroy
     @question.destroy
     redirect_to questions_path
+  end
+
+  def vote
+    @question.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@question.user_id)
+    respond_to { |format| format.turbo_stream }
   end
 
   private
