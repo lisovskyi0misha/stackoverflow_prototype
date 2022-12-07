@@ -1,8 +1,5 @@
-%div{class: "#{object.class.to_s.downcase}-votes"}
-  - if object.class.to_s == 'answer'
-    %p{id: "rate-number-#{object.id}"}= "Rate: #{object.rate}"
-  - else
-    #question-rate= "Rate: #{object.rate}"
-  -unless owner?(object.user_id)
-    %div{ id: "vote-buttons-#{object.id}" }
-      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(object), path: path, object: object }
+%div{class: "#{answer.class.to_s.downcase}-votes"}
+  %p{id: "rate-number-#{answer.id}"}= "Rate: #{answer.rate}"
+  -unless owner?(answer.user_id)
+    %div{ id: "vote-buttons-#{answer.id}" }
+      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(answer), path: answer, object: answer }

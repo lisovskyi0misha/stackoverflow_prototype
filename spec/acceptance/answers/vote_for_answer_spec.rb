@@ -18,7 +18,7 @@ feature 'vote for answer', %{
     within '#answers' do
       click_on 'Like'
     end
-    within '.votes' do
+    within '.answer-votes' do
       expect(page).to have_content('1')
       expect(page).to have_button('Like', disabled: true)
       expect(page).to have_button('Dislike', disabled: true)
@@ -32,7 +32,7 @@ feature 'vote for answer', %{
     within '#answers' do
       click_on 'Dislike'
     end
-    within '.votes' do
+    within '.answer-votes' do
       expect(page).to have_content('-1')
       expect(page).to have_button('Like', disabled: true)
       expect(page).to have_button('Dislike', disabled: true)
@@ -43,7 +43,7 @@ feature 'vote for answer', %{
     answer
     vote
     visit question_path(question)
-    within '.votes' do
+    within '.answer-votes' do
       expect(page).to have_content('1')
       expect(page).to have_button('Like', disabled: true)
       expect(page).to have_button('Dislike', disabled: true)
@@ -55,7 +55,7 @@ feature 'vote for answer', %{
     answer
     vote
     visit question_path(question)
-    within '.votes' do
+    within '.answer-votes' do
       expect(page).to have_content('1')
       expect(page).to_not have_button('Like')
       expect(page).to_not have_button('Dislike')

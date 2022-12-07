@@ -2,4 +2,4 @@
   #question-rate= "Rate: #{@question.rate}"
   -unless owner?(@question.user_id)
     %div{ id: "question-vote-buttons" }
-      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(@question), path: @question, object: @question }
+      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(@question), object: @question }
