@@ -42,7 +42,7 @@ feature 'choose best answer', %q{
     end
   end
 
-  scenario 'user tries to choose other`s best answer', js: true do
+  scenario 'user tries to choose best answer for other`s question', js: true do
     authorize(user_without_answer)
     answer
     visit question_path(question)
