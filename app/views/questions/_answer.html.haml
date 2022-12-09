@@ -12,7 +12,7 @@
     =turbo_frame_tag answer do
       .answer-card
         = render partial: 'shared/answer_votes', locals: { answer: answer, path: {id: answer.id, question_id: answer.question_id} }
-        %p= answer.body
+        %p.answer-body= answer.body
         - if answer.files.attached?
           - answer.files.each do |file|
             = render partial: 'shared/file', locals: { file: file.blob }

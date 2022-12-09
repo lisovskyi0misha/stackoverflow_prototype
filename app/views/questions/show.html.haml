@@ -8,6 +8,7 @@
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
 
 %h2 Answers:
+= render 'empty_answer'
 #best-answer-partial
   - if @question.best_answer.present?
     = render partial: 'questions/answer', locals: {answer: @question.best_answer, best: true  }

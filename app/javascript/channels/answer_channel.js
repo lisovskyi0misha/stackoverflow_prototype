@@ -2,18 +2,24 @@ import consumer from "./consumer"
 
 consumer.subscriptions.create({ channel: "AnswerChannel", room: "answer_room" }, {
   connected() {
-    // Called when the subscription is ready for use on the server
-    console.log('Connected')
+    console.log('Connected');
   },
 
   disconnected() {
-    // Called when the subscription has been terminated by the server
     console.log('Disconnected')
   },
 
   received(data) {
-    // Called when there's incoming data on the websocket for this channel
-    console.log('Recieved')
-    console.log(data)
+    let answerPartial = $('.empty-answer').clone();
+    let url = 'questions/' + data.question_id + '/answers/' + data.id + '/vote'
+
+    answerPartial.removeClass('empty-answer');
+    answerPartial.addClass('answer-card');
+    answerPartial.css('display', '');
+    answerPartial.find('.answer-body').text(data.body);
+    answerPartial.find('.answer-rate-number').attr("id", "rate-number-" + data.id);
+    answerPartial.find('.answer-vote-buttons').attr("id", "vote-buttons-" + data.id);
+    answerPartial.find('.answer-vote-buttons').find('.button_to').attr('action', url)
+    $('#answers').append(answerPartial);
   }
 });
