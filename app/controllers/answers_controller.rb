@@ -7,9 +7,10 @@ class AnswersController < ApplicationController
     @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
     @answer = @question.answers.create(answer_params)
     # respond_to do |format|
+
       if @answer.valid?
         # format.turbo_stream
-        ActionCable.server.broadcast('answer_room', @answer)
+        ActionCable.server.broadcast("question_#{@question.id}", @answer)
       else
         flash[:error] = @answer.errors.full_messages.join(', ')
         format.html { render 'questions/show', status: 422 }

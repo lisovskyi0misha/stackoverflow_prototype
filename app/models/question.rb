@@ -1,7 +1,7 @@
 class Question < ApplicationRecord
 
   validates_presence_of :title, :body
-  has_many :answers
+  has_many :answers,  dependent: :destroy
   belongs_to :best_answer, class_name: 'Answer', foreign_key: 'best_answer_id', required: false
   has_many_attached :files, dependent: :destroy
   has_many :votes, as: :votable

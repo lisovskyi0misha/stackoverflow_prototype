@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
     if @question.valid?
       flash[:success] = 'Your question was successfully created'
       redirect_to questions_path
+      ActionCable.server.broadcast('question-index', @question)
     else
       flash[:error] = @question.errors.full_messages.join(', ')
       render :new, status: :unprocessable_entity

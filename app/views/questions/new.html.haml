@@ -1,8 +1,9 @@
-= bootstrap_form_for @question, url: questions_path, method: :POST do |f|
-  = f.text_field :title
-  = f.text_field :body
-  .question-file-fields
-    = f.file_field :files, multiple: true
-  = f.hidden_field :user_id, value: current_user.id 
-  = f.submit 'Create'
-%button{ id: 'add-file-to-question-button', class: 'btn btn-primary' } Add more files
+= turbo_frame_tag 'create-question-form' do
+  = bootstrap_form_for @question, url: questions_path, method: :POST do |f|
+    = f.text_field :title
+    = f.text_field :body
+    .question-file-fields
+      = f.file_field :files, multiple: true
+    = f.hidden_field :user_id, value: current_user.id 
+    = f.submit 'Create'
+  %button{ id: 'add-file-to-question-button', class: 'btn btn-primary' } Add more files

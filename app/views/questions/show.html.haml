@@ -1,4 +1,5 @@
-.question 
+%p{ class: 'user_id', id: current_user&.id }
+%div{class: 'question', id: "question_#{@question.id}"} 
   %h1= @question.title
   = render 'shared/question_votes'
   %p= @question.body
