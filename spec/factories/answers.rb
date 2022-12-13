@@ -14,4 +14,10 @@ FactoryBot.define do
     question_id { nil }
     user_id { nil }
   end
+
+  factory :just_answer, class: 'Answer' do
+    body
+    association :question, factory: :just_question
+    user
+  end
 end
