@@ -1,7 +1,7 @@
 class QuestionChannel < ApplicationCable::Channel
 
   def subscribed
-    channel = 'question_room'
+    channel = params[:room]
     stream_from channel
   end
 

@@ -26,7 +26,7 @@ feature 'Create answer', %q{
   scenario 'multiple users open same question page', js: true do
     Capybara.using_session('user') do
       user = create(:user)
-      login_as(user, scope: :user)
+      login_as(user)
       visit question_path(question)
     end
 

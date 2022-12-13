@@ -1,0 +1,6 @@
+= turbo_frame_tag 'question-form' do
+  = bootstrap_form_for @comment, url: question_comments_path(@question) do |f|
+    = f.text_field :body, label: 'Comment'
+    = f.hidden_field :commentable_type, value: 'Question'
+    = f.hidden_field :commentable_id, value: @question.id
+    = f.submit 'Send'

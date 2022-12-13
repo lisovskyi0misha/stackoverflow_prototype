@@ -56,7 +56,7 @@ class QuestionsController < ApplicationController
   end
 
   def find_question_with_answers
-    @question = Question.includes({ answers: [:votes, :voted_users] }, :best_answer).find_by_id(params[:id])
+    @question = Question.includes({ answers: [:votes, :voted_users, :comments] }, :comments, :best_answer).find_by_id(params[:id])
   end
 
   def question_params

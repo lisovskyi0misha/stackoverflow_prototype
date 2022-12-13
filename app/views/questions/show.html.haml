@@ -7,12 +7,15 @@
     = render partial: 'shared/file', locals: { file: file.blob }
   - if @question.user_id == current_user&.id 
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
+  = render partial: 'comments', locals: { comments: @question.comments }
+  = turbo_frame_tag 'question-form' do
+    = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-promary'
 
 %h2 Answers:
-= render 'empty_answer'
+= render 'questions/empty_answer'
 #best-answer-partial
   - if @question.best_answer.present?
-    = render partial: 'questions/answer', locals: {answer: @question.best_answer, best: true  }
+    = render partial: 'questions/best_answer', locals: {answer: @question.best_answer }
 
 #answers
   - @question.answers.each do |answer|

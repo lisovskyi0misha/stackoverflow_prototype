@@ -9,7 +9,7 @@ class AnswersController < ApplicationController
     respond_to do |format|
       if @answer.valid?
         format.turbo_stream
-        ActionCable.server.broadcast("question_#{@question.id}", @answer)
+        ActionCable.server.broadcast("question_#{@question.id}",{object: @answer, type: 'answer'})
       else
         flash[:error] = @answer.errors.full_messages.join(', ')
         format.html { render 'questions/show', status: 422 }
