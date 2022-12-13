@@ -3,9 +3,10 @@
     %p.question-title 
     %p.question-details=link_to 'Details', ''
 
-  -@questions.each do |question|
-    %p.question-title=question.title
-    %p.question-details=link_to 'Details', question_path(id: question.id)
+  .questions
+    -@questions.each do |question|
+      %p.question-title=question.title
+      %p.question-details=link_to 'Details', question_path(id: question.id)
 
 = turbo_frame_tag 'create-question-form' do
   = link_to 'Create Question', new_question_path
