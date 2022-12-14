@@ -1,50 +1,30 @@
 class AnswersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
+  before_action :authenticate_user!
   before_action :find_answer, except: [:create]
   before_action :find_best_answer, only: [:choose_best, :delete_best]
   before_action :find_question, only: :create
-  respond_to :html, :turbo_stream, only: [:vote, :choose_best, :delete_best, :create]
-
+  before_action :check_if_owner, only: [:update]
+  respond_to :html
+  respond_to :turbo_stream, except: [:edit, :update]
 
   def create
-    @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
     @answer = @question.answers.create(answer_params)
-    respond_to do |format|
-      if @answer.valid?
-        format.turbo_stream
-        ActionCable.server.broadcast("question_#{@question.id}",{object: @answer, type: 'answer'})
-      else
-        flash[:error] = @answer.errors.full_messages.join(', ')
-        format.html { render 'questions/show', status: 422 }
-      end
-    end
+    respond_with(@answer) { |format| format.html {render 'questions/show', status: 422 } }
+    ActionCable.server.broadcast("question_#{@question.id}",{object: @answer, type: 'answer'}) if @answer.valid?
   end
 
   def destroy
-    respond_to do |format|
-      if owner?(@answer.user_id)
-        @answer.destroy
-        format.turbo_stream { render turbo_stream: turbo_stream.remove(@answer) }
-      else
-        flash[:error] = 'You can`t delete other`s messages'
-        format.html { render 'questions/show', status: 422 }
-      end
-    end
+    return respond_with(@answer.destroy) if owner?(@answer.user_id)
+    render 'questions/show', status: 422
   end
 
   def edit
   end
 
   def update
-    if owner?(@answer.user_id)
-      return redirect_to question_path(@answer.question) if @answer.update(answer_params)
-      flash[:error] = @answer.errors.full_messages.join(', ')
-      render :edit, status: 422
-    else
-      flash[:error] = 'You can`t edit other`s questions'
-      redirect_to question_path(@answer.question)
-    end
+    @answer.update(answer_params)
+    respond_with(@answer, location: -> { question_path(@question) })
   end
 
   def choose_best
@@ -80,5 +60,9 @@ class AnswersController < ApplicationController
 
   def find_question
     @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
+  end
+
+  def check_if_owner
+    return redirect_to question_path(@question) unless owner?(@answer.user_id)
   end
 end
