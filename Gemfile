@@ -31,6 +31,11 @@ gem "cssbundling-rails"
 gem "jbuilder"
 
 gem "haml-rails", "~> 2.0"
+gem 'html2haml'
+
+gem 'devise'
+
+gem "bootstrap_form", "~> 5.1"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -78,4 +83,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
   gem 'shoulda-matchers', '~> 5.0'
+  gem 'launchy'
 end

@@ -1,19 +1,28 @@
 class AnswersController < ApplicationController
 
+  before_action :authenticate_user!, only: [:create, :destroy]
+
   def index
   end
 
-  def new
-    @answer = Answer.new
+  def create
+    @answer = Answer.new(answer_params)
+    @answer.user_id = current_user.id
+    if @answer.save
+      flash[:success] = 'Answer was succesfully created'
+    else
+      flash[:error] = @answer.errors.full_messages.join(', ')
+    end
+    redirect_to question_path(id: @answer.question_id)
   end
 
-  def create
-    @answer = Answer.create(answer_params)
-    if @answer.valid?
-      redirect_to answers_path
-    else
-      render :new, status: :unprocessable_entity
+  def destroy
+    @answer = Answer.find_by_id(params[:id])
+    if @answer.user_id == current_user.id
+      @answer.destroy
+      flash[:success] = 'Answer has been succesfully deleted'
     end
+    redirect_to question_path(id: @answer.question_id)
   end
 
   private
