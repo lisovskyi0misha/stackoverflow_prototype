@@ -1,6 +1,10 @@
 FactoryBot.define do
+  sequence :body do |n|
+    "Answer #{n}"
+  end
+
   factory :answer do
-    body { "Some body" }
+    body
     question_id { nil }
     user_id { nil }
   end

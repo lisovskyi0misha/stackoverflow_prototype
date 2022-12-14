@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User sign up' do
   scenario 'Users trying to sign up with valid params' do

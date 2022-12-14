@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'Show question' do
   given(:user) { create(:user) }
@@ -15,4 +15,3 @@ feature 'Show question' do
     test_question_answers(question, answers)
   end
 end
-

@@ -30,12 +30,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
-    if @question.valid?
+    if @question.user_id != current_user&.id
       redirect_to question_path(@question)
-    else
-      render :edit, status: :unprocessable_entity
+      return
     end
+    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: :unprocessable_entity)
   end
 
   def destroy
@@ -46,7 +45,7 @@ class QuestionsController < ApplicationController
   private
 
   def find_question
-    @question = Question.includes(:answers).find_by_id(params[:id])
+    @question = Question.includes(:answers, :best_answer).find_by_id(params[:id])
   end
 
   def question_params

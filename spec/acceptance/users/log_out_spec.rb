@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'User log out' do
   scenario 'Authenticated users trying to log out' do

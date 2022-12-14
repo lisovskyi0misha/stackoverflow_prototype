@@ -2,4 +2,4 @@
   = render partial: 'questions/form', locals: { answer: @question.answers.build }
 
 = turbo_stream.append 'answers' do
-  = render partial: 'questions/answer', locals: {answer: @answer}
+  = render partial: 'questions/answer', locals: { answer: @answer, best: false }
