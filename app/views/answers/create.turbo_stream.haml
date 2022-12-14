@@ -1,5 +1,5 @@
-= turbo_stream.replace 'new_answer' do
-  = render partial: 'questions/form', locals: { answer: @question.answers.build }
+= turbo_stream.replace 'new-answer' do
+  = render partial: 'questions/answer_form', locals: { answer: @question.answers.build }
 
 = turbo_stream.append 'answers' do
   = render partial: 'questions/answer', locals: { answer: @answer, best: false }

@@ -13,6 +13,7 @@ feature 'Create answer', %q{
     send_answer
     within('#answers') do
       expect(page).to have_content('Some answer body')
+      expect(page).to have_link(('edit_answer_spec.rb'))
     end
   end
 

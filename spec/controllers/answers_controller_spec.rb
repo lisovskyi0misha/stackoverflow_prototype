@@ -10,15 +10,20 @@ describe AnswersController do
   let(:authors_answer) { create(:answer, question_id: authors_question.id, user_id: author.id) }
   sign_in_user
 
-  describe 'POST #create', turbo: true do
+  describe 'POST #create' do
     context 'with valid attributes' do
 
       it 'creates answer' do
-        expect { answers_create_request(question, turbo_stream=true) }.to change(question.answers, :count).by(1)
+        expect { answers_create_request(question) }.to change(question.answers, :count).by(1)
+      end
+
+      it 'saves file to db' do
+        answers_create_request(question, files: true)
+        expect(assigns(:answer).files.first.blob.filename).to eq('test_file.txt')
       end
 
       it 'renders question page' do
-        answers_create_request(question, turbo_stream=true)
+        answers_create_request(question)
         expect(response).to render_template :create
       end
     end
@@ -26,11 +31,11 @@ describe AnswersController do
     context 'with invalid attributes' do
 
       it 'creates answer' do
-        expect { answers_create_request(question, nil, false) }.to_not change(question.answers, :count)
+        expect { answers_create_request(question, body: nil, turbo_stream: false) }.to_not change(question.answers, :count)
       end
 
       it 're-renders question`s` show page' do
-        answers_create_request(question, nil, false)
+        answers_create_request(question, body: nil, turbo_stream: false)
         expect(response).to render_template 'questions/show'
         expect(response).to have_http_status(422)
       end

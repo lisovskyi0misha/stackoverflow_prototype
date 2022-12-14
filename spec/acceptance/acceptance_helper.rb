@@ -2,9 +2,12 @@ require 'rails_helper'
 
 RSpec.configure do |config|
 
-  Capybara.register_driver :selenium do |app|
-    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  Capybara.register_driver :chrome do |app|
+    Capybara::Selenium::Driver.new app, browser: :chrome,
+      options: Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
   end
+  
+  Capybara.javascript_driver = :chrome
 
   config.use_transactional_fixtures = false
 

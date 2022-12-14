@@ -15,11 +15,13 @@ feature 'edit question', %q{
     end
     fill_in 'Title', with: 'Edited question title'
     fill_in 'Content', with: 'Edited question content'
+    attach_file 'File', "#{Rails.root}/spec/acceptance/answers/edit_answer_spec.rb"
     click_on 'Update'
     expect(current_path).to eq(question_path(question))
     within '.question' do
       expect(page).to have_content('Edited question title')
       expect(page).to have_content('Edited question content')
+      expect(page).to have_link('edit_answer_spec.rb')
     end
     
   end

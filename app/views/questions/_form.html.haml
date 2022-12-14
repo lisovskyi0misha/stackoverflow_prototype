@@ -1,4 +1,0 @@
-= bootstrap_form_for answer, url: question_answers_path(@question), remote: true, method: :POST do |f|
-  = f.text_field :body, label: 'Your answer'
-  = f.hidden_field :user_id, value: current_user&.id
-  = f.submit 'Send answer'

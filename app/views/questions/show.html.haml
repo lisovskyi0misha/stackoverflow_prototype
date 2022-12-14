@@ -1,8 +1,10 @@
 .question 
   %h1= @question.title
   %p= @question.body
+  - @question.files.each do |file|
+    = render partial: 'shared/file', locals: { file: file.blob }
   - if @question.user_id == current_user&.id 
-    = link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
+    %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
 
 %h2 Answers:
 #best-answer-partial
@@ -16,4 +18,5 @@
       = render partial: 'questions/answer', locals: {answer: answer, best: false }
 
 %h4 Create new answer 
-= render partial: 'questions/form', locals: { answer: @answer }
+#new-answer
+  = render partial: 'questions/answer_form', locals: { answer: @answer }
