@@ -8,7 +8,6 @@ describe CommentsController do
   let(:user) { create(:user) }
 
   describe 'GET #new_for_answer' do
-
     before { comment_new_request(question, answer) }
 
     it 'creates new comment for answer' do
@@ -24,7 +23,6 @@ describe CommentsController do
   end
 
   describe 'GET #new_for_question' do
-
     before { comment_new_request(question) }
 
     it 'creates new comment for question' do
@@ -40,7 +38,6 @@ describe CommentsController do
   end
 
   describe 'POST #create' do
-
     context 'with valid params' do
       it 'saves answer`s comment to db' do
         expect { comment_create_request(question, 'Some comment body', answer) }.to change(answer.comments, :count).by(1)

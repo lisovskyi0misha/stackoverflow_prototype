@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-
   before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
   before_action :find_answer, except: [:create]
 

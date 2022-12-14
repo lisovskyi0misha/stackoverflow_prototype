@@ -5,11 +5,9 @@ let current_room = $('.question').attr('id')
 if (typeof current_room != "undefined") {
   consumer.subscriptions.create({ channel: "QuestionChannel", room: current_room }, {
     connected() {
-      console.log('Connected to ' + current_room);
     },
     
     disconnected() {
-      console.log('Disconnected')
     },
     
     received(data) {

@@ -1,18 +1,17 @@
 require 'rails_helper'
 
 describe AnswersController do
-
   let(:user) { create(:user) }
   let(:question) { create(:question, user_id: user.id) }
   let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }
   let(:author) { create(:user) }
   let(:authors_question) { create(:question, user_id: author.id) }
   let(:authors_answer) { create(:answer, question_id: authors_question.id, user_id: author.id) }
+
   sign_in_user
 
   describe 'POST #create' do
     context 'with valid attributes' do
-
       it 'creates answer' do
         expect { answers_create_request(question) }.to change(question.answers, :count).by(1)
       end
@@ -29,7 +28,6 @@ describe AnswersController do
     end
 
     context 'with invalid attributes' do
-
       it 'creates answer' do
         expect { answers_create_request(question, body: nil, turbo_stream: false) }.to_not change(question.answers, :count)
       end
@@ -49,14 +47,12 @@ describe AnswersController do
     end
 
     context 'user`s own answer' do
-     
       it 'deletes answer' do
         answer
         expect { delete :destroy, params: {id: answer.id, question_id: question.id}, as: :turbo_stream }.to change(question.answers, :count).by(-1)
       end
   end
     context 'other user`s answer' do
-
       it 'doesn`t delete answer' do
         authors_answer
         expect { delete :destroy, params: {id: authors_answer.id, question_id: question.id} }.to_not change(question.answers, :count)
@@ -83,7 +79,6 @@ describe AnswersController do
     end
 
     context 'with valid attributes' do
-
       context 'user`s own answer' do
         before { answers_update_request(answer) }
 
@@ -110,7 +105,6 @@ describe AnswersController do
     end
 
     context 'with invalid attributes' do
-
       before { answers_update_request(answer, nil) }
 
       it 'doesn`t update answer' do
@@ -163,6 +157,7 @@ describe AnswersController do
         question.best_answer = answer
         question.save
       end
+
       it 'finds answer and question' do
         delete :delete_best, params: {id: answer.id, question_id: question.id}
         expect(assigns(:answer)).to eq(answer)
@@ -180,6 +175,7 @@ describe AnswersController do
         authors_question.best_answer = authors_answer
         authors_question.save
       end
+
       it 'doesn`t delete answer' do
         delete :delete_best, params: {id: authors_answer.id, question_id: authors_question.id}
         expect(expect(assigns(:question).best_answer).to eq(authors_answer))
@@ -188,7 +184,6 @@ describe AnswersController do
   end
 
   describe 'POST #vote' do
-
     it 'finds answer' do
       answers_vote_request(authors_answer)
       expect(assigns(:answer)).to eq(authors_answer)

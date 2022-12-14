@@ -6,15 +6,12 @@ if (typeof current_room === "undefined") {
   let room = $('.question-index').attr('class')
   consumer.subscriptions.create({ channel: "QuestionChannel", room: room }, {
     connected() {
-      console.log('Connected to question index')
     },
   
     disconnected() {
-      console.log('Disconnected')
     },
   
     received(data) {
-      console.log(data)
       let questionPartial = $('.empty-question').clone();
       let url = 'questions/' + data.question_id + '/answers/' + data.id + '/vote'
   

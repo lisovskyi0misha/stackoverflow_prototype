@@ -38,6 +38,7 @@ feature 'Create question' do
       fill_in 'Body', with: 'Test question body'
       click_on 'Create'
     end
+    
     Capybara.using_session('guset') do
       expect(page).to have_content('Test question title')
     end
