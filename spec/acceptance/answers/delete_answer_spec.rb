@@ -12,7 +12,9 @@ feature 'Delete answer', %q{
     answer
     visit question_path(id: question.id)
     click_on 'Delete answer'
-    expect(page).to have_content('Answer has been succesfully deleted')
+    within('#answers') do
+      expect(page).to_not have_content(answer.body)
+    end
   end
 
   scenario 'Authenticated user tries to delete other person`s answer' do
@@ -27,5 +29,4 @@ feature 'Delete answer', %q{
     visit question_path(id: question.id)
     expect(page).to_not have_content('Delete answer')
   end
-
 end

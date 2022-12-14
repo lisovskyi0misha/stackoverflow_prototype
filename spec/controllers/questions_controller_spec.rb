@@ -29,12 +29,6 @@ describe QuestionsController do
       expect(assigns(:question)).to eq(question)
     end
 
-    it 'finds object for answers' do
-      answers.reload
-      expect(assigns(:answers)).to match_array(answers)
-    end
-
-
     it 'creates new answer' do
       answers = question.answers.build
       expect(assigns(:answer)).to be_a_new(Answer)
@@ -155,7 +149,6 @@ describe QuestionsController do
     end
 
     it 'redirects to index' do
-      
       delete :destroy, params: {id: question.id}
       expect(response).to redirect_to questions_path
     end

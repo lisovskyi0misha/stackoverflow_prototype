@@ -1,0 +1,5 @@
+%div{id: "answer_#{answer.id}"}
+  %p= answer.body 
+  - if answer.user_id == current_user&.id
+    - if answer.id.present?
+      %p= button_to 'Delete answer', question_answer_path(id: answer.id, question_id: answer.question_id), method: :delete
