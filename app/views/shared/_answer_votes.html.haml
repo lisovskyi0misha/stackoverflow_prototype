@@ -1,0 +1,5 @@
+%div{class: "#{answer.class.to_s.downcase}-votes"}
+  %p{id: "rate-number-#{answer.id}"}= "Rate: #{answer.rate}"
+  -unless owner?(answer.user_id)
+    %div{ id: "vote-buttons-#{answer.id}" }
+      = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(answer), path: answer, object: answer }

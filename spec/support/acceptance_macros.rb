@@ -26,4 +26,19 @@ module AcceptanceMacros
     question.save
     visit question_path(question)
   end
+
+  def vote_for_question(question, action)
+    visit question_path(question)
+    within '.question-votes' do
+      click_on action
+    end
+  end
+
+  def question_after_vote_expectations(number, disabled)
+    within '.question-votes' do
+      expect(page).to have_content(number)
+      expect(page).to have_button('Like', disabled: disabled)
+      expect(page).to have_button('Dislike', disabled: disabled)
+    end
+  end
 end

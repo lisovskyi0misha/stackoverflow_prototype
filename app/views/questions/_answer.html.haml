@@ -1,16 +1,17 @@
 - if answer&.id.present?
-  -# -binding.break
   -if best
     #best-answer
+      = render partial: 'shared/answer_votes', locals: { answer: answer }
       %p Best answer
       %p= answer.body
       - if answer.files.attached?
         - answer.files.each do |file|
           = render partial: 'shared/file', locals: { file: file.blob }
-      = render partial: 'questions/answer_buttons', locals: { answer: answer, best: true }
+      = render partial: 'questions/answer_buttons', locals: { answer: answer, best: true, path: {id: answer.id, question_id: answer.question_id} }
   - else
     =turbo_frame_tag answer do
       .answer-card
+        = render partial: 'shared/answer_votes', locals: { answer: answer, path: {id: answer.id, question_id: answer.question_id} }
         %p= answer.body
         - if answer.files.attached?
           - answer.files.each do |file|

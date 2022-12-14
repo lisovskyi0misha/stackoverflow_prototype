@@ -3,5 +3,5 @@ import "@hotwired/turbo-rails"
 import "./controllers"
 import * as bootstrap from "bootstrap"
 import './add_jquery'
-import './add_fields_to_answer'
-import './add_fields_to_question'
+import './fields/add_fields_to_answer'
+import './fields/add_fields_to_question'

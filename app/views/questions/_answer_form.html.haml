@@ -1,7 +1,7 @@
 = bootstrap_form_for answer, url: question_answers_path(@question), method: :POST do |f|
   =f.text_field :body, label: 'Your answer'
   =f.hidden_field :user_id, value: current_user&.id
-  .file-fields
+  .answer-file-fields
     = f.file_field :files, multiple: true
   =f.submit 'Send answer'
 %button{ id: 'add-file-to-answer-button', class: 'btn btn-primary' } Add more files

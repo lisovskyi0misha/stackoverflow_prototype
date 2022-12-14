@@ -1,7 +1,8 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :find_question, only: [:edit, :update, :destroy, :vote]
+  before_action :find_question_with_answers, only: [:show]
 
   def index
     @questions = Question.all
@@ -42,10 +43,19 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
+  def vote
+    @question.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@question.user_id)
+    respond_to { |format| format.turbo_stream }
+  end
+
   private
 
   def find_question
-    @question = Question.includes(:answers, :best_answer).find_by_id(params[:id])
+    @question = Question.find_by_id(params[:id])
+  end
+
+  def find_question_with_answers
+    @question = Question.includes({ answers: [:votes, :voted_users] }, :best_answer).find_by_id(params[:id])
   end
 
   def question_params

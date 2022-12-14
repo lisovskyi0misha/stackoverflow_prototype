@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best]
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
   before_action :find_answer, except: [:create]
 
   def create
@@ -18,7 +18,7 @@ class AnswersController < ApplicationController
 
   def destroy
     respond_to do |format|
-      if @answer.user_id == current_user.id
+      if owner?(@answer.user_id)
         @answer.destroy
         format.turbo_stream { render turbo_stream: turbo_stream.remove(@answer) }
       else
@@ -32,7 +32,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.user_id == current_user.id
+    if owner?(@answer.user_id)
       return redirect_to question_path(@answer.question) if @answer.update(answer_params)
       flash[:error] = @answer.errors.full_messages.join(', ')
       render :edit, status: 422
@@ -44,18 +44,23 @@ class AnswersController < ApplicationController
 
   def choose_best
     @old_best_answer = @question.best_answer
-    return redirect_to question_path(@question) unless @question.user_id == current_user.id
+    return redirect_to question_path(@question) unless owner?(@question.user_id)
     @question.best_answer = @answer
     @question.save
     respond_to { |format| format.turbo_stream }
   end
 
   def delete_best
-    @old_best_answer = Answers::DeleteBest.new(@answer, current_user).call
+    @old_best_answer = Answers::DeleteBest.new(@answer, owner?(@answer.question.user_id)).call
     respond_to { |format| format.turbo_stream }
   rescue StandardError => e
     flash[:error] = e.message
     render 'questions/show', status: 422
+  end
+
+  def vote
+    @answer.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@answer.user_id)
+    respond_to { |format| format.turbo_stream }
   end
 
   private

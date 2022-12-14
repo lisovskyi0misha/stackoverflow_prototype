@@ -1,0 +1,6 @@
+- if object.class.to_s == 'Answer'
+  = button_to 'Like', vote_question_answer_path(path), value: 'liked', name: 'vote',disabled: disabled, class: 'btn btn-outline-success'
+  = button_to 'Dislike', vote_question_answer_path(path), value: 'disliked', name: 'vote', disabled: disabled, class: 'btn btn-outline-danger'
+- else
+  = button_to 'Like', vote_question_path(path), value: 'liked', name: 'vote',disabled: disabled, class: 'btn btn-outline-success'
+  = button_to 'Dislike', vote_question_path(path), value: 'disliked', name: 'vote', disabled: disabled, class: 'btn btn-outline-danger'

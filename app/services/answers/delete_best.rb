@@ -1,15 +1,16 @@
 module Answers
   class DeleteBest
+    include ApplicationHelper
 
-    def initialize(answer, user)
+    def initialize(answer, owner)
       @answer = answer
       @question = @answer.question
       @old_best_answer = @question.best_answer
-      @user_id = user.id
+      @owner = owner
     end
 
     def call
-      if @user_id == @question.user_id
+      if @owner 
         @question.best_answer = nil
         @question.save
       else
