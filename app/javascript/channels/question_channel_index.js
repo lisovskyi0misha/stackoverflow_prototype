@@ -1,5 +1,7 @@
 import consumer from "./consumer"
 
+let current_room = $('.question').attr('id')
+
 if (typeof current_room === "undefined") {
   let room = $('.question-index').attr('class')
   consumer.subscriptions.create({ channel: "QuestionChannel", room: room }, {
