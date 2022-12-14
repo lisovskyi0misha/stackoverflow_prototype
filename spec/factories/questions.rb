@@ -20,10 +20,8 @@ FactoryBot.define do
   end
 
   factory :just_question, class: 'Question' do
-    
     title
     body { 'Some body' }
     user
-    # user_id { user, factory: :user }
   end
 end
