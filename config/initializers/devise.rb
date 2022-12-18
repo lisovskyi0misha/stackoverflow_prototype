@@ -272,6 +272,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   config.omniauth :github, Rails.application.credentials.dig(:github_app_id), Rails.application.credentials.dig(:github_app_secret), scope: 'user:email'
+  config.omniauth :twitter2, Rails.application.credentials.dig(:twitter_api), Rails.application.credentials.dig(:twitter_secret), scope: 'user:email'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

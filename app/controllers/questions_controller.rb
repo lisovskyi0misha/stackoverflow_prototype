@@ -4,8 +4,8 @@ class QuestionsController < ApplicationController
   before_action :find_question_with_answers, only: [:show]
 
   def index
-    binding.break
-    @questions = Question.all  after_action :custom_headers
+    # binding.break
+    @questions = Question.all
 
     def custom_headers
       response.headers['Access-Control-Allow-Origin'] = 'Access-Control-Allow-Origin'
