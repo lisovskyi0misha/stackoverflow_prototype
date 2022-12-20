@@ -1,5 +1,5 @@
 .answer-votes
   %p{id: "rate-number-#{answer.id}"}= "Rate: #{answer.rate}"
-  -unless owner?(answer.user_id)
+  -if can? :vote, answer
     %div{ id: "vote-buttons-#{answer.id}" }
       = render partial: 'shared/vote_buttons', locals: { disabled: has_vote?(answer), path: answer, object: answer }

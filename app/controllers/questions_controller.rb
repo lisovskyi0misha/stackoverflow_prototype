@@ -3,6 +3,8 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: %i[edit update destroy vote]
   before_action :find_question_with_answers, only: [:show]
 
+  authorize_resource
+
   def index
     @questions = Question.all
   end
@@ -34,7 +36,7 @@ class QuestionsController < ApplicationController
       redirect_to question_path(@question)
       return
     end
-    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: :unprocessable_entity)
+    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: 422)
   end
 
   def destroy
@@ -43,7 +45,7 @@ class QuestionsController < ApplicationController
   end
 
   def vote
-    @question.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@question.user_id)
+    @question.votes.create(user_id: current_user.id, status: params[:vote])
     respond_to { |format| format.turbo_stream }
   end
 

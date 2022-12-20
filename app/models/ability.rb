@@ -14,5 +14,7 @@ class Ability
     can :delete_best, Answer, question: { user: }
     can :vote, :all
     cannot :vote, :all, { user: }
+    can :new_for_answer, Comment
+    can :new_for_question, Comment
   end
 end

@@ -24,6 +24,8 @@ RSpec.describe Ability, type: :model do
       it { should_not be_able_to :manage, :all }
       it { should be_able_to :create, Question }
       it { should be_able_to :create, Answer }
+      it { should be_able_to :new_for_answer, Comment }
+      it { should be_able_to :new_for_question, Comment }
       it { should be_able_to :create, Comment }
 
       %i[destroy update].each do |action|

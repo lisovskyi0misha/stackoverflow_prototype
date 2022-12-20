@@ -3,20 +3,18 @@ class AnswersController < ApplicationController
   before_action :find_answer, except: :create
   before_action :find_best_answer, only: %i[choose_best delete_best]
   before_action :find_question, only: :create
-  before_action :check_if_owner, only: :update
   respond_to :html
   respond_to :turbo_stream, except: %i[edit update]
+  authorize_resource
 
   def create
     @answer = @question.answers.create(answer_params)
     respond_with(@answer) { |format| format.html {render 'questions/show', status: 422 } }
-    ActionCable.server.broadcast("question_#{@question.id}", {object: @answer, type: 'answer' }) if @answer.valid?
+    ActionCable.server.broadcast("question_#{@question.id}", { object: @answer, type: 'answer' }) if @answer.valid?
   end
 
   def destroy
-    return respond_with(@answer.destroy) if owner?(@answer.user_id)
-
-    render 'questions/show', status: 422
+    respond_with(@answer.destroy)
   end
 
   def edit; end
@@ -27,20 +25,18 @@ class AnswersController < ApplicationController
   end
 
   def choose_best
-    return redirect_to @question unless owner?(@question.user_id)
-
     @question.best_answer = @answer
     respond_with(@question.save)
   end
 
   def delete_best
-    @question.best_answer = nil if owner?(@question.user_id)
+    @question.best_answer = nil
     @question.save
     respond_with(@question)
   end
 
   def vote
-    respond_with(@answer.votes.create(user_id: current_user.id, status: params[:vote])) unless owner?(@answer.user_id)
+    respond_with(@answer.votes.create(user_id: current_user.id, status: params[:vote]))
   end
 
   private
@@ -60,9 +56,5 @@ class AnswersController < ApplicationController
 
   def find_question
     @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
-  end
-
-  def check_if_owner
-    return redirect_to question_path(@question) unless owner?(@answer.user_id)
   end
 end

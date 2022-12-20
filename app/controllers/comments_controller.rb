@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_question
+  authorize_resource
 
   def new_for_answer
     @answer = Answer.find_by_id(params[:answer_id])
