@@ -52,7 +52,7 @@ describe CommentsController do
       it 'doesn`t save comment to db' do
         expect { comment_create_request(question, nil, answer) }.to_not change(question.comments, :count)
       end
-      
+
       it 're-renders question`s show' do
         comment_create_request(question, nil, answer)
         expect(response).to have_http_status(422)

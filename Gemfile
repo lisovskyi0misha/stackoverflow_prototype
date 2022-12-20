@@ -61,9 +61,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
-  gem 'omniauth'
   gem 'omniauth-github'
-  gem 'omniauth-oauth2'
   gem 'omniauth-rails_csrf_protection'
   gem 'omniauth-twitter2'
   gem 'rails-controller-testing'

@@ -340,9 +340,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   launchy
-  omniauth
   omniauth-github
-  omniauth-oauth2
   omniauth-rails_csrf_protection
   omniauth-twitter2
   pg (~> 1.1)
