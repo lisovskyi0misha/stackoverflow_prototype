@@ -24,7 +24,6 @@ RSpec.describe User do
     context 'user haven`t been authorized' do
       context 'user exists' do
         it 'doesn`t save user to db' do
-
           expect { User.from_omniauth(auth_for_existed_user) }.to_not change(User, :count)
         end
 
@@ -39,7 +38,7 @@ RSpec.describe User do
 
       context 'user does not exist' do
         it 'saves user to db' do
-          expect { User.from_omniauth(auth) }.to change(User, :count).by(1)       
+          expect { User.from_omniauth(auth) }.to change(User, :count).by(1)
         end
 
         it 'returns user' do
