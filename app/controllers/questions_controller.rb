@@ -1,16 +1,10 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy, :vote]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :find_question, only: %i[edit update destroy vote]
   before_action :find_question_with_answers, only: [:show]
 
   def index
-    # binding.break
     @questions = Question.all
-
-    def custom_headers
-      response.headers['Access-Control-Allow-Origin'] = 'Access-Control-Allow-Origin'
-    end
-  
   end
 
   def show
@@ -33,8 +27,7 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @question.user_id != current_user&.id
@@ -61,7 +54,11 @@ class QuestionsController < ApplicationController
   end
 
   def find_question_with_answers
-    @question = Question.includes({ answers: [:votes, :voted_users, :comments] }, :comments, :best_answer).find_by_id(params[:id])
+    @question = Question.includes(
+      { answers: %i[votes voted_users comments] },
+      :comments,
+      :best_answer
+    ).find_by_id(params[:id])
   end
 
   def question_params

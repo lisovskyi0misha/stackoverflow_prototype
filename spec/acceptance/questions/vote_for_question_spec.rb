@@ -4,7 +4,7 @@ feature 'vote for question', %{
   Authenticated user can vote either if he likes question or dislike question
   User can vote only once for each question
   User can`t vote for his own question`
-}, js:true do
+}, js: true do
   given(:user) { create(:user) }
   given(:author) { create(:user) }
   given(:question) { create(:question, user_id: author.id) }
@@ -28,7 +28,9 @@ feature 'vote for question', %{
     question
     vote
     visit question_path(question)
-    question_after_vote_expectations('1', true)
+    expect(page).to have_content('1')
+    expect(page).to_not have_button('Like')
+    expect(page).to_not have_button('Dislike')
   end
 
   scenario 'Authenticated user tries to vote for his own question' do

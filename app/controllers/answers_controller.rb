@@ -1,25 +1,25 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_answer, except: [:create]
-  before_action :find_best_answer, only: [:choose_best, :delete_best]
+  before_action :find_answer, except: :create
+  before_action :find_best_answer, only: %i[choose_best delete_best]
   before_action :find_question, only: :create
-  before_action :check_if_owner, only: [:update]
+  before_action :check_if_owner, only: :update
   respond_to :html
-  respond_to :turbo_stream, except: [:edit, :update]
+  respond_to :turbo_stream, except: %i[edit update]
 
   def create
     @answer = @question.answers.create(answer_params)
     respond_with(@answer) { |format| format.html {render 'questions/show', status: 422 } }
-    ActionCable.server.broadcast("question_#{@question.id}",{object: @answer, type: 'answer'}) if @answer.valid?
+    ActionCable.server.broadcast("question_#{@question.id}", {object: @answer, type: 'answer' }) if @answer.valid?
   end
 
   def destroy
     return respond_with(@answer.destroy) if owner?(@answer.user_id)
+
     render 'questions/show', status: 422
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     @answer.update(answer_params)
@@ -28,6 +28,7 @@ class AnswersController < ApplicationController
 
   def choose_best
     return redirect_to @question unless owner?(@question.user_id)
+
     @question.best_answer = @answer
     respond_with(@question.save)
   end
