@@ -34,6 +34,8 @@ gem 'devise'
 
 gem 'bootstrap_form', '~> 5.1'
 
+gem 'doorkeeper'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
