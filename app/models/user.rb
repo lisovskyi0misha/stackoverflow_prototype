@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id, dependent: :delete_all
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id, dependent: :delete_all
 
+  scope :except_user, ->(user_id) { where.not(id: user_id) }
+
   def self.from_omniauth(auth)
     provider_params = { provider_name: auth.provider, uid: auth.uid }
     if Provider.find_by(provider_params)
