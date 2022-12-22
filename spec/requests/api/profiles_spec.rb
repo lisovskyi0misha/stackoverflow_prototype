@@ -56,7 +56,7 @@ describe 'Profile API' do
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
       let!(:users) { create_list(:user, 3) }
 
-      before { get '/api/v1/profiles/all', params: { access_token: access_token.token, format: :json } }
+      before { get '/api/v1/profiles/all', params: { access_token: access_token.token } }
 
       it 'returns status 200' do
         expect(response.status).to eq(200)
