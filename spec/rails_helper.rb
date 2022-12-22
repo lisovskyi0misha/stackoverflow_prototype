@@ -36,6 +36,13 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
 
+  Shoulda::Matchers.configure do |shoulda_mathcers_config|
+    shoulda_mathcers_config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.

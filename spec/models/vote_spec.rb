@@ -1,13 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Vote, type: :model do
-  Shoulda::Matchers.configure do |config|
-    config.integrate do |with|
-      with.test_framework :rspec
-      with.library :rails
-    end
-  end
-
+RSpec.describe Vote do
   let(:user) { create(:user) }
   let(:question) { create(:question, user_id: user.id) }
   let(:answer) { create(:answer, question_id: question.id, user_id: user.id) }

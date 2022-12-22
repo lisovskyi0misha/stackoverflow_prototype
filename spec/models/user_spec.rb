@@ -9,6 +9,19 @@ RSpec.describe User do
   it { should have_many :comments }
   it { should have_many :providers }
 
+  describe 'scope #except_user' do
+    let(:current_user) { create(:user) }
+    let(:users) { create_list(:user, 3) }
+
+    it 'returns users' do
+      expect(User.except_user(current_user.id)).to eq(users)
+    end
+
+    it 'doesn`t return current_user' do
+      expect(User.except_user(current_user.id)).to_not include(current_user)
+    end
+  end
+
   describe '.from_omniauth' do
     let!(:user) { create(:user) }
     let(:auth) { OmniAuth::AuthHash.new(provider: 'github', uid: '12345', info: { email: 'test@test' }) }
