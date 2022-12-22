@@ -2,6 +2,13 @@ Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users, controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: [] do
+        get :me, on: :collection
+      end
+    end
+  end
   root to: 'questions#index'
   resources :questions do
     resources :comments, only: [:create]
