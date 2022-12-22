@@ -66,8 +66,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem "turbo-rails"
   gem 'database_cleaner'
-  # gem "capybara-webkit"
-  # gem 'webrick'
+  gem "responders"
 end
 
 group :development do

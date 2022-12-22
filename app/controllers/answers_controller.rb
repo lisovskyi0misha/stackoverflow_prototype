@@ -1,6 +1,10 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
   before_action :find_answer, except: [:create]
+  before_action :find_best_answer, only: [:choose_best, :delete_best]
+  before_action :find_question, only: :create
+  respond_to :html, :turbo_stream, only: [:vote, :choose_best, :delete_best, :create]
+
 
   def create
     @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
@@ -43,24 +47,19 @@ class AnswersController < ApplicationController
   end
 
   def choose_best
-    @old_best_answer = @question.best_answer
-    return redirect_to question_path(@question) unless owner?(@question.user_id)
+    return redirect_to @question unless owner?(@question.user_id)
     @question.best_answer = @answer
-    @question.save
-    respond_to { |format| format.turbo_stream }
+    respond_with(@question.save)
   end
 
   def delete_best
-    @old_best_answer = Answers::DeleteBest.new(@answer, owner?(@answer.question.user_id)).call
-    respond_to { |format| format.turbo_stream }
-  rescue StandardError => e
-    flash[:error] = e.message
-    render 'questions/show', status: 422
+    @question.best_answer = nil if owner?(@question.user_id)
+    @question.save
+    respond_with(@question)
   end
 
   def vote
-    @answer.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@answer.user_id)
-    respond_to { |format| format.turbo_stream }
+    respond_with(@answer.votes.create(user_id: current_user.id, status: params[:vote])) unless owner?(@answer.user_id)
   end
 
   private
@@ -72,5 +71,13 @@ class AnswersController < ApplicationController
   def find_answer
     @answer = Answer.includes(:question).find_by_id(params[:id])
     @question = @answer.question
+  end
+
+  def find_best_answer
+    @old_best_answer = @question.best_answer
+  end
+
+  def find_question
+    @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
   end
 end
