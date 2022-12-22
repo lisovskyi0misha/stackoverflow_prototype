@@ -1,9 +1,9 @@
 - if @old_best_answer.present?
   = turbo_stream.replace 'best-answer' do
-    = render partial: 'questions/answer', locals: { answer: @question.best_answer, best: true }
+    = render partial: 'questions/best_answer', locals: { answer: @question.best_answer, best: true }
 - else
   = turbo_stream.append 'best-answer-partial' do
-    = render partial: 'questions/answer', locals: { answer: @question.best_answer, best: true }
+    = render partial: 'questions/best_answer', locals: { answer: @question.best_answer }
 
 = turbo_stream.replace "answer_#{@answer.id}" do
-  = render partial: 'questions/answer', locals: { answer: @old_best_answer, best: false}
+  = render partial: 'questions/answer', locals: { answer: @old_best_answer}

@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 describe QuestionsController do
-
   let(:user) { create(:user) }
   let(:question) { create(:question, user_id: user.id) }
   let(:author) { create(:user) }
   let(:authors_question) { create(:question, user_id: author.id) }
 
   describe 'GET #index' do
-
     let(:questions) { create_list(:question, 2, user_id: user.id) }
     before { get :index }
 
@@ -22,7 +20,6 @@ describe QuestionsController do
   end
 
   describe 'GET #show' do
-    
     let(:answers) { question.answers }
     before { create_list(:answer, 3, question_id: question.id, user_id: question.user_id) }
     before { get :show, params: { id: question.id } }
@@ -109,7 +106,6 @@ describe QuestionsController do
 
     context 'with valid attributes' do
       context 'user`s own question' do
-
         it 'finds object for update' do
           put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
           expect(assigns(:question)).to eq(question)
@@ -163,7 +159,6 @@ describe QuestionsController do
      
 
     context 'with invalid attributes' do
-
       it 'finds object for update' do
         put :update, params: {id: question.id, question: attributes_for(:question, user_id: user.id)}
         expect(assigns(:question)).to eq(question)

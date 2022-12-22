@@ -8,7 +8,9 @@ module AcceptanceMacros
 
   def send_answer
     visit questions_path
-    click_on 'Details'
+    within('.questions') do
+      click_on 'Details'
+    end
     fill_in 'Your answer', with: 'Some answer body'
     attach_file 'File', "#{Rails.root}/spec/acceptance/answers/edit_answer_spec.rb"
     click_on 'Send answer'
@@ -21,7 +23,7 @@ module AcceptanceMacros
   end
 
   def prepare_for_delete_best(user)
-    authorize(user)
+    login_as(user)
     question.best_answer = answer
     question.save
     visit question_path(question)

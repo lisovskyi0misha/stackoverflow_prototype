@@ -1,7 +1,8 @@
-- if answer.user_id == current_user&.id
+- if owner?(@question.user_id)
   -if best
     = button_to 'Remove from best', delete_best_question_answer_path(id: answer.id, question_id: answer.question_id), method: :delete, class: 'btn btn-outline-success'
   - else
     = button_to 'Choose as best', choose_best_question_answer_path(id: answer.id, question_id: answer.question_id), method: :post, class: 'btn btn-outline-success'
+- if owner?(answer.user_id)
   = link_to 'Edit answer', edit_question_answer_path(id: answer.id, question_id: answer.question_id), class: 'btn btn-outline-warning'
   = button_to 'Delete answer', question_answer_path(id: answer.id, question_id: answer.question_id), method: :delete, class: 'btn btn-outline-danger'

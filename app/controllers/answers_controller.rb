@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-
   before_action :authenticate_user!, only: [:create, :destroy, :update, :choose_best, :vote]
   before_action :find_answer, except: [:create]
 
@@ -9,6 +8,7 @@ class AnswersController < ApplicationController
     respond_to do |format|
       if @answer.valid?
         format.turbo_stream
+        ActionCable.server.broadcast("question_#{@question.id}",{object: @answer, type: 'answer'})
       else
         flash[:error] = @answer.errors.full_messages.join(', ')
         format.html { render 'questions/show', status: 422 }

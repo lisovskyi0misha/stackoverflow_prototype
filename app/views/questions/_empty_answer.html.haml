@@ -1,0 +1,8 @@
+.empty-answer
+  .answer-votes
+  %p.answer-rate-number= "Rate: 0"
+  .answer-vote-buttons
+    = button_to 'Like', '', value: 'liked', name: 'vote', class: 'btn btn-outline-success'
+    = button_to 'Dislike', '', value: 'disliked', name: 'vote', class: 'btn btn-outline-danger'
+
+  %p.answer-body

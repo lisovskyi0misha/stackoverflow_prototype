@@ -20,6 +20,6 @@ module ApplicationHelper
   end
 
   def owner?(object_user_id)
-    object_user_id == current_user&.id
+    current_user.nil? ? false : (object_user_id == current_user.id)
   end
 end

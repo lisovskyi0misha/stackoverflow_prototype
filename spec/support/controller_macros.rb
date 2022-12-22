@@ -37,6 +37,22 @@ module ControllerMacros
 
     def questions_vote_request(question, action='liked')
       post :vote, params: { id: question.id, vote: action }, as: :turbo_stream
-    end 
+    end
+
+    def comment_new_request(question, answer=nil)
+      if answer.nil?
+        get :new_for_question, params: { question_id: question.id }
+      else
+        get :new_for_answer, params: { question_id: question.id, answer_id: answer.id } 
+      end
+    end
+
+    def comment_create_request(question, body, answer=nil)
+      if answer.nil?
+        post :create, params: { comment: { commentable_id: question.id, commentable_type: 'Question', body: body }, question_id: question.id } 
+      else
+        post :create, params: { comment: { commentable_id: answer.id, commentable_type: 'Answer', body: body }, question_id: question.id }
+      end
+    end
   end
 end

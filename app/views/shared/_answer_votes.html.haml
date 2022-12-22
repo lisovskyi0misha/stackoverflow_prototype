@@ -1,4 +1,4 @@
-%div{class: "#{answer.class.to_s.downcase}-votes"}
+.answer-votes
   %p{id: "rate-number-#{answer.id}"}= "Rate: #{answer.rate}"
   -unless owner?(answer.user_id)
     %div{ id: "vote-buttons-#{answer.id}" }

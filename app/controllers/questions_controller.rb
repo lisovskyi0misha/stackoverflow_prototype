@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:edit, :update, :destroy, :vote]
   before_action :find_question_with_answers, only: [:show]
@@ -21,6 +20,7 @@ class QuestionsController < ApplicationController
     if @question.valid?
       flash[:success] = 'Your question was successfully created'
       redirect_to questions_path
+      ActionCable.server.broadcast('question-index', @question)
     else
       flash[:error] = @question.errors.full_messages.join(', ')
       render :new, status: :unprocessable_entity
@@ -55,7 +55,7 @@ class QuestionsController < ApplicationController
   end
 
   def find_question_with_answers
-    @question = Question.includes({ answers: [:votes, :voted_users] }, :best_answer).find_by_id(params[:id])
+    @question = Question.includes({ answers: [:votes, :voted_users, :comments] }, :comments, :best_answer).find_by_id(params[:id])
   end
 
   def question_params

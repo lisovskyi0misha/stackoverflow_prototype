@@ -3,9 +3,7 @@ require_relative '../acceptance_helper'
 feature 'Create question' do
   given(:user) { create(:user) }
   scenario 'Authenticated user tries to create question' do
-    
-    authorize(user)
-
+    login_as(user)
     visit questions_path
     click_on 'Create Question'
     fill_in 'Title', with: 'Test question title'
@@ -21,7 +19,28 @@ feature 'Create question' do
   scenario 'Non-authenticated user tries to create question' do
     visit questions_path
     click_on 'Create Question'
-
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
+
+  scenario 'Multiple users open questions index', js: true do
+    Capybara.using_session('user') do
+      login_as(user)
+      visit questions_path
+    end
+
+    Capybara.using_session('guset') do
+      visit questions_path
+    end
+
+    Capybara.using_session('user') do
+      click_on 'Create Question'
+      fill_in 'Title', with: 'Test question title'
+      fill_in 'Body', with: 'Test question body'
+      click_on 'Create'
+    end
+    
+    Capybara.using_session('guset') do
+      expect(page).to have_content('Test question title')
+    end
   end
 end

@@ -18,4 +18,10 @@ FactoryBot.define do
     body { 'Some body' }
     user_id { nil }
   end
+
+  factory :just_question, class: 'Question' do
+    title
+    body { 'Some body' }
+    user
+  end
 end

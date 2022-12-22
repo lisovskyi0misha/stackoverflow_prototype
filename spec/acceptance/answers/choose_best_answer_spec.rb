@@ -10,7 +10,7 @@ feature 'choose best answer', %q{
   given(:user_without_answer) { create(:user) }
 
   scenario 'user tries to choose best answer for his own question for the first time', js: true do
-    authorize(user)
+    login_as(user)
     answer
     visit question_path(question)
     within '#answers' do
@@ -24,7 +24,7 @@ feature 'choose best answer', %q{
   end
 
   scenario 'user tries to choose best answer for his own question for more than first time', js: true do
-    authorize(user)
+    login_as(user)
     answer
     second_answer
     visit question_path(question)
@@ -42,8 +42,8 @@ feature 'choose best answer', %q{
     end
   end
 
-  scenario 'user tries to choose other`s best answer', js: true do
-    authorize(user_without_answer)
+  scenario 'user tries to choose best answer for other`s question', js: true do
+    login_as(user_without_answer)
     answer
     visit question_path(question)
     within '#answers' do
