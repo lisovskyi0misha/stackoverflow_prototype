@@ -12,7 +12,16 @@ module Api
         render json: { answer: @answer, comments: @answer.comments, files: @answer.file_urls }
       end
 
+      def create
+        @answer = Answer.create(answer_params)
+        render check_singe_resource_validness
+      end
+
       private
+
+      def answer_params
+        params.require(:answer).permit(:body, :user_id, :question_id)
+      end
 
       def find_answers
         @answers = Answer.where(question_id: params[:question_id]).order(:id)

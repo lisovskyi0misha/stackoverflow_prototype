@@ -13,14 +13,10 @@ module Api
 
       def create
         @question = Question.create(question_params)
-        render check_question
+        render check_singe_resource_validness
       end
 
       private
-
-      def check_question
-        @question.valid? ? { json: @question } : { json: { message: @question.errors.full_messages.join("\n") }, status: 422 }
-      end
 
       def collected_questions
         Question.all.collect { |question| ["question_#{question.id}".to_sym, question] }.to_h
