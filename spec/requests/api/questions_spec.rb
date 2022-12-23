@@ -8,7 +8,6 @@ describe 'Questions API' do
     unauthorized_user_context
 
     context 'authorized user' do
-
       let!(:questions) { create_list(:just_question, 3) }
 
       before { get '/api/v1/questions', params: { access_token: token.token } }
@@ -23,10 +22,11 @@ describe 'Questions API' do
         end
       end
 
-      %w[id title body created_at updated_at].each do |field|
+      %w[id title body created_at updated_at user_id].each do |field|
         it "contains #{field}" do
           questions.each do |question|
-            expect(response.body).to be_json_eql(question.send(field.to_sym).to_json).at_path("question_#{question.id}/#{field}")
+            path = "question_#{question.id}/#{field}"
+            expect(response.body).to be_json_eql(question.send(field.to_sym).to_json).at_path(path)
           end
         end
       end
@@ -58,9 +58,10 @@ describe 'Questions API' do
           expect(response.body).to be_json_eql(question.comments.to_json).at_path('comments')
         end
 
-        %w[body created_at updated_at].each do |field|
+        %w[body created_at updated_at user_id].each do |field|
           it "includes #{field}" do
-            expect(response.body).to be_json_eql(question.comments.first.send(field.to_sym).to_json).at_path("comments/0/#{field}")
+            path = "comments/0/#{field}"
+            expect(response.body).to be_json_eql(question.comments.first.send(field.to_sym).to_json).at_path(path)
           end
         end
       end
