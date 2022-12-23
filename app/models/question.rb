@@ -9,7 +9,7 @@ class Question < ApplicationRecord
   has_many :voted_users, -> { distinct }, through: :votes
 
   def rate
-    self.votes.liked.count - self.votes.disliked.count
+    votes.liked.count - votes.disliked.count
   end
 
   def file_urls
