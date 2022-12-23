@@ -6,7 +6,7 @@ describe 'Answers API' do
   let(:question) { create(:just_question) }
 
   describe 'GET #index' do
-    unauthorized_user_context(':id/answers')
+    get_unauthorized_user_context(':id/answers')
 
     context 'authorized user' do
       let!(:answers) { create_list(:just_answer, 3, question_id: question.id) }
@@ -30,7 +30,7 @@ describe 'Answers API' do
   end
 
   describe 'GET #show' do
-    unauthorized_user_context(':question_id/answers/:id')
+    get_unauthorized_user_context(':question_id/answers/:id')
   end
 
   context 'authorized' do

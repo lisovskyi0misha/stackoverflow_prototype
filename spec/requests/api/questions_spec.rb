@@ -5,7 +5,7 @@ describe 'Questions API' do
   let(:token) { create(:access_token, resource_owner_id: user.id) }
 
   describe 'GET #index' do
-    unauthorized_user_context
+    get_unauthorized_user_context
 
     context 'authorized user' do
       let!(:questions) { create_list(:just_question, 3) }
@@ -36,7 +36,7 @@ describe 'Questions API' do
   describe 'GET #show' do
     let(:question) { create(:just_question) }
 
-    unauthorized_user_context(':id')
+    get_unauthorized_user_context(':id')
 
     context 'authorized user' do
       before { get "/api/v1/questions/#{question.id}", params: { access_token: token.token } }
@@ -68,6 +68,49 @@ describe 'Questions API' do
 
       it 'includes attached files' do
         expect(response.body).to be_json_eql(question.file_urls.to_json).at_path('files')
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    post_unauthorized_user_context
+
+    context 'authorized user' do
+      let(:valid_params) { { access_token: token.token, question: attributes_for(:question, user_id: user.id) } }
+      let(:invalid_params) { { access_token: token.token, question: attributes_for(:invalid_question, user_id: user.id) } }
+      let(:question) { create(:question, user_id: user.id) }
+
+      it 'returns status 200' do
+        post '/api/v1/questions/', params: valid_params
+        expect(response.status).to eq(200)
+      end
+
+      context 'with valid params' do
+        it 'saves question to db' do
+          expect { post '/api/v1/questions/', params: valid_params }.to change(Question, :count).by(1)
+        end
+
+        it 'returns question' do
+          post '/api/v1/questions/', params: valid_params
+          expect(response.body).to be_json_eql(question.to_json)
+        end
+      end
+
+      context 'with invalid params' do
+        it 'doesn`t save question to db' do
+          expect { post '/api/v1/questions/', params: invalid_params }.to_not change(Question, :count)
+        end
+
+        it 'returns status 422' do
+          post '/api/v1/questions/', params: invalid_params
+          expect(response.status).to eq(422)
+        end
+
+        it 'returns error message' do
+          post '/api/v1/questions/', params: invalid_params
+          message = "Title can't be blank\nBody can't be blank"
+          expect(response.body).to be_json_eql(message.to_json).at_path('message')
+        end
       end
     end
   end
