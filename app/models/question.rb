@@ -11,4 +11,8 @@ class Question < ApplicationRecord
   def rate
     self.votes.liked.count - self.votes.disliked.count
   end
+
+  def file_urls
+    files.collect { |file| Rails.application.routes.url_helpers.rails_blob_url(file, host: 'localhost:3000') }
+  end
 end

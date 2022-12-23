@@ -23,5 +23,6 @@ FactoryBot.define do
     title
     body { 'Some body' }
     user
+    files { [Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/test_file.txt", 'image/png')] }
   end
 end
