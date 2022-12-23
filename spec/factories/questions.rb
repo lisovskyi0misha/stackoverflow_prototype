@@ -4,7 +4,7 @@ FactoryBot.define do
   end
   factory :question do
     title { 'Some title' }
-    body { "Some body" }
+    body { 'Some body' }
     user_id { nil }
   end
 

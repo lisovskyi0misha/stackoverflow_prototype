@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Profile API' do
+describe 'Profiles API' do
   describe 'GET #me' do
     context 'unauthorized user' do
       it 'gets unauthorized error with no access token' do

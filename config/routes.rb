@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
+      resources :questions, only: :index
       resources :profiles, only: [] do
         get :me, on: :collection
         get :all, on: :collection
