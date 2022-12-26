@@ -7,7 +7,7 @@ module ControllerMacros
   end
 
   def return_instance_name
-    controller_class.to_s.delete_suffix('Controller').downcase
+    controller_class.to_s.delete_suffix('sController').downcase
   end
 
   def resource

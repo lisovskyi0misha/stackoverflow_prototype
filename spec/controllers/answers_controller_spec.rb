@@ -7,6 +7,7 @@ describe AnswersController do
   let(:author) { create(:user) }
   let(:authors_question) { create(:question, user_id: author.id) }
   let(:authors_answer) { create(:answer, question_id: authors_question.id, user_id: author.id) }
+  let(:instance) { :answer }
 
   sign_in_user
 
@@ -16,8 +17,6 @@ describe AnswersController do
     let(:template) { 'questions/show' }
 
     context 'with valid attributes' do
-      let(:instance) { :answer }
-
       it_behaves_like 'valid create'
 
       it 'renders question page' do
@@ -51,15 +50,9 @@ describe AnswersController do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: answer.id, question_id: answer.question_id } }
+    let(:object) { answer }
 
-    it 'renders edit' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'finds answer' do
-      expect(assigns(:answer)).to eq(answer)
-    end
+    it_behaves_like 'edit'
   end
 
   describe 'PUT #update' do
@@ -205,5 +198,9 @@ describe AnswersController do
 
   def do_invalid_create_request
     post :create, params: { answer: {body: nil, user_id: question.user_id }, question_id: question.id }
+  end
+
+  def do_edit_request
+    get :edit, params: { id: answer.id, question_id: answer.question_id }
   end
 end

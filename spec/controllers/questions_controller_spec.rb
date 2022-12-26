@@ -5,6 +5,7 @@ describe QuestionsController do
   let(:question) { create(:question, user_id: user.id) }
   let(:author) { create(:user) }
   let(:authors_question) { create(:question, user_id: author.id) }
+  let(:instance) { :question }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2, user_id: user.id) }
@@ -52,17 +53,11 @@ describe QuestionsController do
 
   describe 'GET #edit' do
     sign_in_user
-    before { get :edit, params: { id: question.id } }
 
-    it 'finds object for edit' do
-      expect(assigns(:question)).to eq(question)
-    end
+    let(:object) { question }
 
-    it 'renders edit' do
-      expect(response).to render_template :edit
-    end
+    it_behaves_like 'edit'
   end
-
   describe 'POST #create' do
     sign_in_user
 
@@ -180,7 +175,6 @@ describe QuestionsController do
   describe 'POST #vote' do
     let(:authors_object) { authors_question }
     let(:others_object) { question }
-    let(:instance) { :question }
 
     sign_in_user
 
@@ -206,5 +200,9 @@ describe QuestionsController do
 
   def do_invalid_create_request
     post :create, params: { question: attributes_for(:invalid_question) }
+  end
+
+  def do_edit_request
+    get :edit, params: { id: question.id }
   end
 end
