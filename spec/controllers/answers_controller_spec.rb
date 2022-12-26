@@ -201,6 +201,4 @@ describe AnswersController do
   def do_request(answer, action = 'liked')
     post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
   end
-
-
 end
