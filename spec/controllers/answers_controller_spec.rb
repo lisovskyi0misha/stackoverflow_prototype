@@ -191,38 +191,16 @@ describe AnswersController do
   end
 
   describe 'POST #vote' do
-    it 'finds answer' do
-      answers_vote_request(authors_answer)
-      expect(assigns(:answer)).to eq(authors_answer)
-    end
-    context 'user tries to like for other`s answer once' do
-      it 'saves vote to db' do
-        expect { answers_vote_request(authors_answer) }.to change(authors_answer, :rate).by(1)
-      end
+    let(:authors_object) { authors_answer }
+    let(:others_object) { answer }
+    let(:instance) { :answer }
 
-      it 'renders vote' do
-        answers_vote_request(authors_answer)
-        expect(response).to render_template :vote
-      end
-    end
-
-    context 'user tries to dislike for other`s answer once' do
-      it 'saves vote to db' do
-        expect { answers_vote_request(authors_answer, 'disliked') }.to change(authors_answer, :rate).by(-1)
-      end
-    end
-
-    context 'user tries to vote for other`s answer twice' do
-      it 'saves only one vote to a db' do
-        expect { answers_vote_request(authors_answer) }.to change(authors_answer, :rate).by(1)
-        expect { answers_vote_request(authors_answer) }.to_not change(authors_answer, :rate)
-      end
-    end
-
-    context 'user tries to vote for his own answer' do
-      it 'dosen`t vote like to db' do
-        expect { answers_vote_request(answer) }.to_not change(answer, :rate)
-      end
-    end
+    it_behaves_like 'vote'
   end
+
+  def do_request(answer, action = 'liked')
+    post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
+  end
+
+
 end

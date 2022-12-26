@@ -197,39 +197,16 @@ describe QuestionsController do
   end
 
   describe 'POST #vote' do
+    let(:authors_object) { authors_question }
+    let(:others_object) { question }
+    let(:instance) { :question }
+
     sign_in_user
 
-    it 'finds question' do
-      questions_vote_request(authors_question)
-      expect(assigns(:question)).to eq(authors_question)
-    end
+    it_behaves_like 'vote'
+  end
 
-    context 'user tries to vote for other`s question once' do
-      it 'saves like to db' do
-        expect { questions_vote_request(authors_question) }.to change(authors_question, :rate).by(1)
-      end
-
-      it 'saves dislike to db' do
-        expect { questions_vote_request(authors_question, 'disliked') }.to change(authors_question, :rate).by(-1)
-      end
-    end
-
-    context 'user tries to vote for other`s question twice' do
-      it 'saves only one vote to a db' do
-        expect { questions_vote_request(authors_question) }.to change(authors_question, :rate).by(1)
-        expect { questions_vote_request(authors_question) }.to_not change(authors_question, :rate)
-      end
-    end
-
-    context 'user tries to vote for his own question' do
-      it 'dosen`t vote like to db' do
-        expect { questions_vote_request(question) }.to_not change(question, :rate)
-      end
-    end
-
-    it 'renders vote' do
-      questions_vote_request(authors_question)
-      expect(response).to render_template :vote
-    end
+  def do_request(question, action = 'liked')
+    post :vote, params: { id: question.id, vote: action }, as: :turbo_stream
   end
 end

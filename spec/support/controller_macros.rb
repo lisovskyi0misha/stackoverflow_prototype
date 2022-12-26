@@ -6,6 +6,10 @@ module ControllerMacros
     end
   end
 
+  def return_instance_name
+    controller_class.to_s.delete_suffix('Controller').downcase
+  end
+
   def self.extended(cls)
     cls.include(InstanceMethods)
   end
@@ -29,10 +33,6 @@ module ControllerMacros
       else
         post :create, params: {answer: {body: body, user_id: question.user_id}, question_id: question.id }
       end
-    end
-
-    def answers_vote_request(answer, action='liked')
-      post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
     end
 
     def questions_vote_request(question, action='liked')
