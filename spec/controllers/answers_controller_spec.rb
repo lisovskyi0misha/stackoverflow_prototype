@@ -11,33 +11,22 @@ describe AnswersController do
   sign_in_user
 
   describe 'POST #create' do
-    context 'with valid attributes' do
-      it 'creates answer' do
-        expect { answers_create_request(question) }.to change(question.answers, :count).by(1)
-      end
+    let(:object_for_count) { question.answers }
+    let(:object) { question }
+    let(:template) { 'questions/show' }
 
-      it 'saves file to db' do
-        answers_create_request(question, files: true)
-        expect(assigns(:answer).files.first.blob.filename).to eq('test_file.txt')
-      end
+    context 'with valid attributes' do
+      let(:instance) { :answer }
+
+      it_behaves_like 'valid create'
 
       it 'renders question page' do
-        answers_create_request(question)
+        do_create_request(question)
         expect(response).to render_template :create
       end
     end
 
-    context 'with invalid attributes' do
-      it 'creates answer' do
-        expect { answers_create_request(question, body: nil, turbo_stream: false) }.to_not change(question.answers, :count)
-      end
-
-      it 're-renders question`s` show page' do
-        answers_create_request(question, body: nil, turbo_stream: false)
-        expect(response).to render_template 'questions/show'
-        expect(response).to have_http_status(422)
-      end
-    end
+    it_behaves_like 'invalid create'
   end
 
   describe 'DELETE #destroy' do
@@ -200,5 +189,21 @@ describe AnswersController do
 
   def do_request(answer, action = 'liked')
     post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
+  end
+
+  def do_create_request(question, files: false)
+    if files
+      post :create, params: { answer: {
+        body: 'Some body',
+        user_id: question.user_id,
+        files: [fixture_file_upload('test_file.txt', 'text/plain')]
+      }, question_id: question.id }, as: :turbo_stream
+    else
+      post :create, params: { answer: { body: 'Some body', user_id: question.user_id }, question_id: question.id }, as: :turbo_stream
+    end
+  end
+
+  def do_invalid_create_request
+    post :create, params: { answer: {body: nil, user_id: question.user_id }, question_id: question.id }
   end
 end

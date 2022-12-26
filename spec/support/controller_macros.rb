@@ -10,29 +10,18 @@ module ControllerMacros
     controller_class.to_s.delete_suffix('Controller').downcase
   end
 
+  def resource
+    'question`s show' if return_instance_name == 'answer'
+    'new' if return_instance_name == 'question'
+  end
+
   def self.extended(cls)
     cls.include(InstanceMethods)
   end
 
   module InstanceMethods
     def answers_update_request(answer, body='Changed body')
-      put :update, params: { id: answer.id, question_id: answer.question_id, answer: {body: body}}
-    end
-
-    def answers_create_request(question, body: 'Some body', turbo_stream: true, files: false)
-      if turbo_stream
-        if files
-          post :create, params: { answer: {
-            body: body,
-            user_id: question.user_id,
-            files: [fixture_file_upload('test_file.txt', 'text/plain')]
-          }, question_id: question.id }, as: :turbo_stream
-        else
-          post :create, params: { answer: { body: body, user_id: question.user_id }, question_id: question.id }, as: :turbo_stream
-        end
-      else
-        post :create, params: { answer: { body: body, user_id: question.user_id }, question_id: question.id }
-      end
+      put :update, params: { id: answer.id, question_id: answer.question_id, answer: { body: body } }
     end
 
     def comment_new_request(question, answer = nil)

@@ -66,23 +66,14 @@ describe QuestionsController do
   describe 'POST #create' do
     sign_in_user
 
-    context 'with valid attributes' do
-      it 'saves new question to db' do
-        expect {
-          post :create,
-          params: { question: { user_id: user.id, body: 'Some body', title: 'Some title' } }
-        }.to change(Question, :count).by(1)
-      end
+    let(:instance) { :question }
+    let(:object_for_count) { Question }
+    let(:template) { :new }
 
-      it 'saves file to db' do
-        post :create, params: { question: {
-          user_id: user.id,
-          body: 'Some body',
-          title: 'Some title',
-          files: [fixture_file_upload('test_file.txt', 'text/plain')]
-        } }
-        expect(assigns(:question).files.first.blob.filename).to eq('test_file.txt')
-      end
+    context 'with valid attributes' do
+      let(:object) { nil }
+
+      it_behaves_like 'valid create'
 
       it 'redirects to index' do
         post :create, params: { question: { user_id: user.id, body: 'Some body', title: 'Some title' } }
@@ -90,17 +81,7 @@ describe QuestionsController do
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does`t save new question to db' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
-      end
-
-      it 're-render to new' do
-        post :create, params: { question: attributes_for(:invalid_question) }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response).to render_template(:new)
-      end
-    end
+    it_behaves_like 'invalid create'
   end
 
   describe 'PUT #update' do
@@ -208,5 +189,22 @@ describe QuestionsController do
 
   def do_request(question, action = 'liked')
     post :vote, params: { id: question.id, vote: action }, as: :turbo_stream
+  end
+
+  def do_create_request(question, files: false)
+    if files
+      post :create, params: { question: {
+        user_id: user.id,
+        body: 'Some body',
+        title: 'Some title',
+        files: [fixture_file_upload('test_file.txt', 'text/plain')]
+      } }, as: :turbo_stream
+    else
+      post :create, params: { question: { user_id: user.id, body: 'Some body', title: 'Some title' }, as: :turbo_stream }
+    end
+  end
+
+  def do_invalid_create_request
+    post :create, params: { question: attributes_for(:invalid_question) }
   end
 end
