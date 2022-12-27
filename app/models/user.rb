@@ -20,7 +20,6 @@ class User < ApplicationRecord
     else
       user = user_exist?(auth, provider_params)
       return user if user
-
       create_new_user(auth, provider_params)
     end
   end
