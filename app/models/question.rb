@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  include ModelHelper
+
   validates_presence_of :title, :body
   belongs_to :best_answer, class_name: 'Answer', foreign_key: 'best_answer_id', required: false
   belongs_to :user
@@ -7,8 +9,4 @@ class Question < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :votes, as: :votable
   has_many :voted_users, -> { distinct }, through: :votes
-
-  def rate
-    self.votes.liked.count - self.votes.disliked.count
-  end
 end

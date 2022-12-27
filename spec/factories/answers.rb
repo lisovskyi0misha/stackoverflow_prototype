@@ -19,5 +19,6 @@ FactoryBot.define do
     body
     association :question, factory: :just_question
     user
+    files { [Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/files/test_file.txt", 'text/plain')] }
   end
 end

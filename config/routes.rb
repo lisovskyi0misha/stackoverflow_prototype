@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   namespace :api do
     namespace :v1 do
+      resources :questions, only: %i[index show create] do
+        resources :answers, only: %i[index show create]
+      end
       resources :profiles, only: [] do
         get :me, on: :collection
         get :all, on: :collection
@@ -12,7 +15,7 @@ Rails.application.routes.draw do
   end
   root to: 'questions#index'
   resources :questions do
-    resources :comments, only: [:create]
+    resources :comments, only: :create
     get 'comments/:answer_id/new', to: 'comments#new_for_answer', as: :new_answer_comment
     get 'comments/new', to: 'comments#new_for_question', as: :new_comment
     post :vote, on: :member
