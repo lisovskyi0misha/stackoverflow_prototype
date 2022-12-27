@@ -16,10 +16,7 @@ module ApplicationHelper
 
   def has_vote?(object)
     return true if current_user.nil?
-    object.voted_users.ids.include?(current_user.id)
-  end
 
-  def owner?(object_user_id)
-    current_user.nil? ? false : (object_user_id == current_user.id)
+    object.voted_users.ids.include?(current_user.id)
   end
 end

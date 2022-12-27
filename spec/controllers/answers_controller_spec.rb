@@ -42,16 +42,17 @@ describe AnswersController do
 
   describe 'DELETE #destroy' do
     it 'finds answer' do
-      delete :destroy, params: {id: answer, question_id: answer.question_id}, as: :turbo_stream
+      delete :destroy, params: { id: answer, question_id: answer.question_id }, as: :turbo_stream
       expect(assigns(:answer)).to eq(answer)
     end
 
     context 'user`s own answer' do
       it 'deletes answer' do
         answer
-        expect { delete :destroy, params: {id: answer.id, question_id: question.id}, as: :turbo_stream }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: answer.id, question_id: question.id }, as: :turbo_stream }.to change(question.answers, :count).by(-1)
       end
-  end
+    end
+
     context 'other user`s answer' do
       it 'doesn`t delete answer' do
         authors_answer
@@ -61,10 +62,10 @@ describe AnswersController do
   end
 
   describe 'GET #edit' do
-    before {  get :edit, params: { id: answer.id, question_id: answer.question_id } }
+    before { get :edit, params: { id: answer.id, question_id: answer.question_id } }
 
     it 'renders edit' do
-      expect(assigns(:answer)). to eq answer
+      expect(assigns(:answer)).to eq answer
     end
 
     it 'finds answer' do
@@ -119,14 +120,17 @@ describe AnswersController do
 
   describe 'POST #choose_best' do
     it 'finds answer and question' do
-      post :choose_best, params: {id: answer.id, question_id: answer.question_id}, as: :turbo_stream
+      post :choose_best, params: { id: answer.id, question_id: answer.question_id }, as: :turbo_stream
       expect(assigns(:answer)).to eq(answer)
       expect(assigns(:question)).to eq(question)
     end
 
     context 'question`s author' do
       let(:answers) { create_list(:answer, 3, question_id: question.id, user_id: user.id) }
-      before { answers; post :choose_best, params: {id: answer.id, question_id: answer.question_id}, as: :turbo_stream }
+      before do
+        answers
+        post :choose_best, params: { id: answer.id, question_id: answer.question_id }, as: :turbo_stream
+      end
 
       it 'selects answer as best' do
         expect(Question.first.best_answer).to eq(answer)
@@ -139,7 +143,10 @@ describe AnswersController do
 
     context 'other user' do
       let(:authors_answers) { create_list(:answer, 3, question_id: authors_question.id, user_id: author.id) }
-      before { authors_answers; post :choose_best, params: {id: authors_answer.id, question_id: authors_answer.question_id}, as: :turbo_stream }
+      before do
+        authors_answers
+        post :choose_best, params: { id: authors_answer.id, question_id: authors_answer.question_id }, as: :turbo_stream
+      end
 
       it 'doesn`t select answer as best' do
         expect(Question.first.best_answer).to_not eq(authors_answer)
@@ -159,13 +166,13 @@ describe AnswersController do
       end
 
       it 'finds answer and question' do
-        delete :delete_best, params: {id: answer.id, question_id: question.id}
+        delete :delete_best, params: { id: answer.id, question_id: question.id }
         expect(assigns(:answer)).to eq(answer)
         expect(assigns(:question)).to eq(question)
       end
 
       it 'deletes best answer' do
-        delete :delete_best, params: {id: answer.id, question_id: question.id}
+        delete :delete_best, params: { id: answer.id, question_id: question.id }
         expect(assigns(:question).best_answer).to eq(nil)
       end
     end
@@ -177,8 +184,8 @@ describe AnswersController do
       end
 
       it 'doesn`t delete answer' do
-        delete :delete_best, params: {id: authors_answer.id, question_id: authors_question.id}
-        expect(expect(assigns(:question).best_answer).to eq(authors_answer))
+        delete :delete_best, params: { id: authors_answer.id, question_id: authors_question.id }
+        expect(assigns(:question).best_answer).to eq(authors_answer)
       end
     end
   end
@@ -209,7 +216,7 @@ describe AnswersController do
       it 'saves only one vote to a db' do
         expect { answers_vote_request(authors_answer) }.to change(authors_answer, :rate).by(1)
         expect { answers_vote_request(authors_answer) }.to_not change(authors_answer, :rate)
-      end 
+      end
     end
 
     context 'user tries to vote for his own answer' do

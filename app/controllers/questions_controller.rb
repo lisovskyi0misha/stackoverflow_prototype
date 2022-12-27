@@ -1,16 +1,12 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:edit, :update, :destroy, :vote]
+  before_action :authenticate_user!, except: %i[index show]
+  before_action :find_question, only: %i[edit update destroy vote]
   before_action :find_question_with_answers, only: [:show]
 
-  def index
-    # binding.break
-    @questions = Question.all
+  authorize_resource
 
-    def custom_headers
-      response.headers['Access-Control-Allow-Origin'] = 'Access-Control-Allow-Origin'
-    end
-  
+  def index
+    @questions = Question.all
   end
 
   def show
@@ -33,15 +29,14 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @question.user_id != current_user&.id
       redirect_to question_path(@question)
       return
     end
-    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: :unprocessable_entity)
+    @question.update(question_params) ? redirect_to(question_path(@question)) : render(:edit, status: 422)
   end
 
   def destroy
@@ -50,7 +45,7 @@ class QuestionsController < ApplicationController
   end
 
   def vote
-    @question.votes.create(user_id: current_user.id, status: params[:vote]) unless owner?(@question.user_id)
+    @question.votes.create(user_id: current_user.id, status: params[:vote])
     respond_to { |format| format.turbo_stream }
   end
 
@@ -61,7 +56,11 @@ class QuestionsController < ApplicationController
   end
 
   def find_question_with_answers
-    @question = Question.includes({ answers: [:votes, :voted_users, :comments] }, :comments, :best_answer).find_by_id(params[:id])
+    @question = Question.includes(
+      { answers: %i[votes voted_users comments] },
+      :comments,
+      :best_answer
+    ).find_by_id(params[:id])
   end
 
   def question_params

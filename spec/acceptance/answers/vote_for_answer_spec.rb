@@ -45,8 +45,8 @@ feature 'vote for answer', %{
     visit question_path(question)
     within '.answer-votes' do
       expect(page).to have_content('1')
-      expect(page).to have_button('Like', disabled: true)
-      expect(page).to have_button('Dislike', disabled: true)
+      expect(page).to_not have_button('Like', disabled: true)
+      expect(page).to_not have_button('Dislike', disabled: true)
     end
   end
 
