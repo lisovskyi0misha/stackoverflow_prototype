@@ -34,7 +34,7 @@ describe 'Answers API' do
 
     context 'authorized' do
       let(:answer) { create(:just_answer, question_id: question.id) }
-      let!(:comments) { create_list(:answers_comment, 3, commentable_id: answer.id) }
+      let!(:comments) { create_list(:answers_comment, 3, commentable: answer) }
 
       before { get "/api/v1/questions/#{question.id}/answers/#{answer.id}", params: { access_token: token.token } }
 

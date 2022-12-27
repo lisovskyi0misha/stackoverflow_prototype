@@ -50,7 +50,7 @@ describe 'Questions API' do
       end
 
       context 'comments' do
-        let!(:comment) { create(:questions_comment, commentable_id: question.id) }
+        let!(:comment) { create(:questions_comment, commentable: question) }
 
         before { get "/api/v1/questions/#{question.id}", params: { access_token: token.token } }
 

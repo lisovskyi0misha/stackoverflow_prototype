@@ -1,14 +1,12 @@
 FactoryBot.define do
   factory :questions_comment, class: 'Comment' do
-    commentable_type { 'Question' }
-    commentable_id { nil }
+    association :commentable, factory: :just_question
     body { 'Some body' }
-    user
+    association :user, factory: :user
   end
 
   factory :answers_comment, class: 'Comment' do
-    commentable_type { 'Answer' }
-    commentable_id { nil }
+    association :commentable, factory: :just_answer
     body { 'Some body' }
     user
   end
