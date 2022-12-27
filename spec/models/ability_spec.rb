@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'cancan/matchers'
 
-RSpec.describe Ability, type: :model do
+RSpec.describe Ability do
   describe 'for quest' do
     subject(:ability) { Ability.new(user) }
     let(:user) { nil }
