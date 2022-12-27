@@ -18,7 +18,7 @@ if (typeof current_room != "undefined") {
         let userId = $('.user_id').attr('id')
         let answerPartial = $('.empty-answer').clone();
         let url = 'questions/' + answer.question_id + '/answers/' + answer.id + '/vote'
-        if (answer.id == userId) { return false }
+        if (answer.user_id == userId) { return false }
       
         answerPartial.removeClass('empty-answer');
         answerPartial.addClass('answer-card');
