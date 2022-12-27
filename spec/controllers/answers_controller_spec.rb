@@ -7,37 +7,25 @@ describe AnswersController do
   let(:author) { create(:user) }
   let(:authors_question) { create(:question, user_id: author.id) }
   let(:authors_answer) { create(:answer, question_id: authors_question.id, user_id: author.id) }
+  let(:instance) { :answer }
 
   sign_in_user
 
   describe 'POST #create' do
-    context 'with valid attributes' do
-      it 'creates answer' do
-        expect { answers_create_request(question) }.to change(question.answers, :count).by(1)
-      end
+    let(:object_for_count) { question.answers }
+    let(:object) { question }
+    let(:template) { 'questions/show' }
 
-      it 'saves file to db' do
-        answers_create_request(question, files: true)
-        expect(assigns(:answer).files.first.blob.filename).to eq('test_file.txt')
-      end
+    context 'with valid attributes' do
+      it_behaves_like 'valid create'
 
       it 'renders question page' do
-        answers_create_request(question)
+        do_create_request(question)
         expect(response).to render_template :create
       end
     end
 
-    context 'with invalid attributes' do
-      it 'creates answer' do
-        expect { answers_create_request(question, body: nil, turbo_stream: false) }.to_not change(question.answers, :count)
-      end
-
-      it 're-renders question`s` show page' do
-        answers_create_request(question, body: nil, turbo_stream: false)
-        expect(response).to render_template 'questions/show'
-        expect(response).to have_http_status(422)
-      end
-    end
+    it_behaves_like 'invalid create'
   end
 
   describe 'DELETE #destroy' do
@@ -62,15 +50,9 @@ describe AnswersController do
   end
 
   describe 'GET #edit' do
-    before { get :edit, params: { id: answer.id, question_id: answer.question_id } }
+    let(:object) { answer }
 
-    it 'renders edit' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'finds answer' do
-      expect(assigns(:answer)).to eq(answer)
-    end
+    it_behaves_like 'edit'
   end
 
   describe 'PUT #update' do
@@ -191,38 +173,34 @@ describe AnswersController do
   end
 
   describe 'POST #vote' do
-    it 'finds answer' do
-      answers_vote_request(authors_answer)
-      expect(assigns(:answer)).to eq(authors_answer)
-    end
-    context 'user tries to like for other`s answer once' do
-      it 'saves vote to db' do
-        expect { answers_vote_request(authors_answer) }.to change(authors_answer, :rate).by(1)
-      end
+    let(:authors_object) { authors_answer }
+    let(:others_object) { answer }
+    let(:instance) { :answer }
 
-      it 'renders vote' do
-        answers_vote_request(authors_answer)
-        expect(response).to render_template :vote
-      end
-    end
+    it_behaves_like 'vote'
+  end
 
-    context 'user tries to dislike for other`s answer once' do
-      it 'saves vote to db' do
-        expect { answers_vote_request(authors_answer, 'disliked') }.to change(authors_answer, :rate).by(-1)
-      end
-    end
+  def do_request(answer, action = 'liked')
+    post :vote, params: { question_id: answer.question_id, id: answer.id, vote: action }, as: :turbo_stream
+  end
 
-    context 'user tries to vote for other`s answer twice' do
-      it 'saves only one vote to a db' do
-        expect { answers_vote_request(authors_answer) }.to change(authors_answer, :rate).by(1)
-        expect { answers_vote_request(authors_answer) }.to_not change(authors_answer, :rate)
-      end
+  def do_create_request(question, files: false)
+    if files
+      post :create, params: { answer: {
+        body: 'Some body',
+        user_id: question.user_id,
+        files: [fixture_file_upload('test_file.txt', 'text/plain')]
+      }, question_id: question.id }, as: :turbo_stream
+    else
+      post :create, params: { answer: { body: 'Some body', user_id: question.user_id }, question_id: question.id }, as: :turbo_stream
     end
+  end
 
-    context 'user tries to vote for his own answer' do
-      it 'dosen`t vote like to db' do
-        expect { answers_vote_request(answer) }.to_not change(answer, :rate)
-      end
-    end
+  def do_invalid_create_request
+    post :create, params: { answer: {body: nil, user_id: question.user_id }, question_id: question.id }
+  end
+
+  def do_edit_request
+    get :edit, params: { id: answer.id, question_id: answer.question_id }
   end
 end
