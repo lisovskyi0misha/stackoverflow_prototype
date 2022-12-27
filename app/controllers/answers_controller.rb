@@ -60,7 +60,7 @@ class AnswersController < ApplicationController
   def find_question
     @question = Question.includes(:answers, :best_answer).find_by_id(params[:question_id])
   end
-
+  
   def check_if_owner
     return redirect_to question_path(@question) unless owner?(@answer.user_id)
   end
