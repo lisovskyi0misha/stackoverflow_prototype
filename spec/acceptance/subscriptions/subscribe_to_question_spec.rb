@@ -15,7 +15,6 @@ feature 'subscribe to question', %q{
       click_on 'Subscribe'
     end
     expect(page).to have_content('You`ve been succesfully subscribes')
-    expect(page).to have_button('Subscribe', disabled: true)
   end
 
   scenario 'Authenticated user tries to subscribe to question for more then the first time' do

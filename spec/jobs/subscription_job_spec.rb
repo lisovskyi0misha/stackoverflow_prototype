@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe SubscriptionJob do
   let!(:user) { create(:user) }
   let(:another_user) { create(:user) }
-  let(:question) { create(:question, { user: }) }
+  let!(:question) { create(:question, { user: }) }
 
   it 'creates job' do
     expect { SubscriptionJob.perform_later(question, another_user) }.to have_enqueued_job.on_queue('default')

@@ -3,7 +3,6 @@ class SubscriptionsController < ApplicationController
 
   def create
     SubscriptionJob.perform_later(@question, current_user)
-    @answer = @question.answer.build
     flash[:success] = 'You`ve been succesfully subscribes'
     redirect_to @question
   end
