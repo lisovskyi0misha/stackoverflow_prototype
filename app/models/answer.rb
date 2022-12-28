@@ -15,7 +15,13 @@ class Answer < ApplicationRecord
 
   def question_update_mail
     question = self.question
-    users = User.with_subscription(question)
-    QuestionMailer.update_mail(user, question, self).deliver_later
+    users = question.subscribed_users
+    send_mails(users, question)
+  end
+
+  def send_mails(users, question)
+    users.each do |user|
+      QuestionMailer.update_mail(user, question, self).deliver_later
+    end
   end
 end

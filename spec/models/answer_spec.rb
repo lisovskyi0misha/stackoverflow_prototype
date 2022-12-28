@@ -7,8 +7,9 @@ RSpec.describe Answer do
 
   describe '#question_update_mail' do
     let!(:user) { create(:user) }
-    let(:question) { create(:question, user_id: user.id) }
-    let(:subscription) { question.subscriptions.create({ user_id: })}
+    let(:users) { create_list(:user, 3) }
+    let(:question) { create(:just_question, { user: }) }
+    let(:subscriptions) { users.each { |another_user| question.subscriptions.create({ user_id: another_user.id }) } }
     let(:method) { create(:just_answer, { question: }) }
 
     it 'sends email' do
@@ -21,10 +22,15 @@ RSpec.describe Answer do
       expect { method }.to have_enqueued_job.on_queue('default')
     end
 
-    it 'sends email to user with subscription' do
+    it 'sends email only to users with subscription' do
+      subscriptions
+      user.subscriptions.destroy_all
       perform_enqueued_jobs { method }
-      mail = ActionMailer::Base.deliveries.last
-      expect(mail.to.first).to eq(user.email)
+      users.each_with_index do |another_user, ind|
+        mail = ActionMailer::Base.deliveries[ind]
+        expect(mail.to.first).to_not eq(user.email)
+        expect(mail.to.first).to eq(another_user.email)
+      end
     end
   end
 end
