@@ -36,6 +36,10 @@ gem 'bootstrap_form', '~> 5.1'
 
 gem 'doorkeeper'
 
+gem 'sidekiq'
+
+gem 'whenever'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -74,6 +78,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'letter_opener'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 

@@ -9,4 +9,12 @@ class Question < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :votes, as: :votable
   has_many :voted_users, -> { distinct }, through: :votes
+
+  scope :for_the_last_day, -> { where(created_at: Date.yesterday) }
+
+  def self.send_daily_email
+    User.find_each do |user|
+      SendEmailJob.perform_later(user)
+    end
+  end
 end

@@ -36,6 +36,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
   config.extend RequestMacros
+  config.include ActiveJob::TestHelper
 
   Shoulda::Matchers.configure do |shoulda_mathcers_config|
     shoulda_mathcers_config.integrate do |with|

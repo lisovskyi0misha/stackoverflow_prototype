@@ -1,0 +1,4 @@
+<h1>Questions for <%= Date.yesterday %>:</h1>
+<% @questions.each do |question| %>
+  <%= question.title %>
+<% end %>
