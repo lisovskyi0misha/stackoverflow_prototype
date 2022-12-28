@@ -14,7 +14,7 @@ class Question < ApplicationRecord
 
   def self.send_daily_email
     User.find_each do |user|
-      SendEmailJob.perform_later(user)
+      QuestionMailer.digest_mail(user).deliver_later
     end
   end
 end
