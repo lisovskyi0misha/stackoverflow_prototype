@@ -8,7 +8,9 @@ class AnswersController < ApplicationController
   authorize_resource
 
   def create
+    binding.break
     @answer = @question.answers.create(answer_params)
+    
     respond_with(@answer) { |format| format.html {render 'questions/show', status: 422 } }
     ActionCable.server.broadcast("question_#{@question.id}", { object: @answer, type: 'answer' }) if @answer.valid?
   end

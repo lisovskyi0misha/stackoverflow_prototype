@@ -19,7 +19,7 @@ describe AnswersController do
     context 'with valid attributes' do
       it_behaves_like 'valid create'
 
-      it 'renders question page' do
+      it 'renders create action' do
         do_create_request(question)
         expect(response).to render_template :create
       end

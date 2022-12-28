@@ -25,6 +25,6 @@ class Question < ApplicationRecord
   private
 
   def subscribe
-    subscriptions.create({ user_id: })
+    SubscriptionJob.perform_later(self, user)
   end
 end

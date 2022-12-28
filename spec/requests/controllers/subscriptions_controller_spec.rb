@@ -14,7 +14,7 @@ RSpec.describe 'SubscriptionsController' do
 
     context 'For the first time' do
       it 'creates new subscription' do
-        expect { post "/questions/#{question.id}/subscriptions" }.to change(question.subscriptions, :count).by(1)
+        expect { perform_enqueued_jobs { post "/questions/#{question.id}/subscriptions" } }.to change(question.subscriptions, :count).by(1)
       end
 
       it 'subscribes right user' do
@@ -33,12 +33,6 @@ RSpec.describe 'SubscriptionsController' do
 
       it 'doesn`t create subscription' do
         expect { post "/questions/#{question.id}/subscriptions" }.to_not change(question.subscriptions, :count)
-      end
-
-      it 'renders questions show with 422 status' do
-        post "/questions/#{question.id}/subscriptions"
-        expect(response).to render_template('questions/show')
-        expect(response).to have_http_status(422)
       end
     end
   end

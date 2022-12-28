@@ -26,7 +26,7 @@ RSpec.describe Question do
     let(:user) { create(:user) }
 
     it 'creates new subscription' do
-      expect { create(:just_question, { user: }) }.to change(user.subscriptions, :count).by(1)
+      expect { perform_enqueued_jobs { create(:just_question, { user: }) } }.to change(user.subscriptions, :count).by(1)
     end
 
     it 'subscribed user to his question' do
