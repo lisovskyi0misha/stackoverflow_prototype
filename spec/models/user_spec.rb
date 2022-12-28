@@ -8,6 +8,8 @@ RSpec.describe User do
   it { should have_many :votes }
   it { should have_many :comments }
   it { should have_many :providers }
+  it { should have_many :subscriptions }
+  # it { should have_many(:questions).through(:subscriptions) }
 
   describe 'scope #except_user' do
     let(:current_user) { create(:user) }

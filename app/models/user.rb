@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :providers
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id, dependent: :delete_all
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id, dependent: :delete_all
+  has_many :subscriptions
 
   scope :except_user, ->(user_id) { where.not(id: user_id) }
 

@@ -5,10 +5,11 @@ RSpec.describe Answer do
 
   it { should belong_to :question }
 
-  describe '.question_update_mail' do
+  describe '#question_update_mail' do
     let!(:user) { create(:user) }
     let(:question) { create(:question, user_id: user.id) }
-    let(:method) { create(:just_answer, question: question) }
+    let(:subscription) { question.subscriptions.create({ user_id: })}
+    let(:method) { create(:just_answer, { question: }) }
 
     it 'sends email' do
       expect {
@@ -20,7 +21,7 @@ RSpec.describe Answer do
       expect { method }.to have_enqueued_job.on_queue('default')
     end
 
-    it 'sends email to right user' do
+    it 'sends email to user with subscription' do
       perform_enqueued_jobs { method }
       mail = ActionMailer::Base.deliveries.last
       expect(mail.to.first).to eq(user.email)
