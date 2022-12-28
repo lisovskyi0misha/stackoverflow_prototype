@@ -1,7 +1,6 @@
 module ControllerMacros
   def sign_in_user
     before do
-      request&.env['devise.mapping'] = Devise.mappings[:user]
       sign_in user
     end
   end
@@ -20,8 +19,8 @@ module ControllerMacros
   end
 
   module InstanceMethods
-    def answers_update_request(answer, body='Changed body')
-      put :update, params: { id: answer.id, question_id: answer.question_id, answer: { body: body } }
+    def answers_update_request(answer, body = 'Changed body')
+      put :update, params: { id: answer.id, question_id: answer.question_id, answer: { body: } }
     end
 
     def comment_new_request(question, answer = nil)
@@ -32,12 +31,28 @@ module ControllerMacros
       end
     end
 
-    def comment_create_request(question, body, answer=nil)
+    def comment_create_request(question, body, answer = nil)
       if answer.nil?
-        post :create, params: { comment: { commentable_id: question.id, commentable_type: 'Question', body: body }, question_id: question.id }
+        commentable_question(question, body)
       else
-        post :create, params: { comment: { commentable_id: answer.id, commentable_type: 'Answer', body: body }, question_id: question.id }
+        commentable_answer(answer, question, body)
       end
+    end
+
+    private
+
+    def commentable_question(question, body)
+      post :create, params: {
+        comment: { commentable_id: question.id, commentable_type: 'Question', body: },
+        question_id: question.id
+      }
+    end
+
+    def commentable_answer(answer, question, body)
+      post :create, params: {
+        comment: { commentable_id: answer.id, commentable_type: 'Answer', body: },
+        question_id: question.id
+      }
     end
   end
 end

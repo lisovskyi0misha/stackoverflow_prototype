@@ -14,7 +14,9 @@ RSpec.describe 'SubscriptionsController' do
 
     context 'For the first time' do
       it 'creates new subscription' do
-        expect { perform_enqueued_jobs { post "/questions/#{question.id}/subscriptions" } }.to change(question.subscriptions, :count).by(1)
+        expect do
+          perform_enqueued_jobs { post "/questions/#{question.id}/subscriptions" }
+        end.to change(question.subscriptions, :count).by(1)
       end
 
       it 'subscribes right user' do
@@ -33,6 +35,38 @@ RSpec.describe 'SubscriptionsController' do
 
       it 'doesn`t create subscription' do
         expect { post "/questions/#{question.id}/subscriptions" }.to_not change(question.subscriptions, :count)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:subscription) { question.subscriptions.create(user_id: user.id) }
+    let!(:other_subscription) { question.subscriptions.create(user_id: create(:user).id) }
+
+    it 'finds question' do
+      delete "/questions/#{question.id}/subscriptions/#{subscription.id}"
+      expect(assigns(:question)).to eq(question)
+    end
+
+    context 'subscribed user tries to unsubscribe' do
+      it 'finds subscription' do
+        delete "/questions/#{question.id}/subscriptions/#{subscription.id}"
+        expect(assigns(:subscription)).to eq(subscription)
+      end
+
+      it 'deletes subscription' do
+        expect { delete "/questions/#{question.id}/subscriptions/#{subscription.id}" }.to change(user.subscriptions, :count).by(-1)
+      end
+    end
+
+    context 'non-subscribed user tries to unsubscribe' do
+      it 'finds subscription' do
+        delete "/questions/#{question.id}/subscriptions/#{other_subscription.id}"
+        expect(assigns(:subscription)).to eq(other_subscription)
+      end
+
+      it 'doesn`t delete subscription' do
+        expect { delete "/questions/#{question.id}/subscriptions/#{other_subscription.id}" }.to_not change(user.subscriptions, :count)
       end
     end
   end

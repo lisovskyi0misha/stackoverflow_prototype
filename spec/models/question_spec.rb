@@ -16,9 +16,9 @@ RSpec.describe Question do
     end
 
     it 'sends email' do
-      expect {
+      expect do
         perform_enqueued_jobs { Question.send_daily_email }
-      }.to change(ActionMailer::Base.deliveries, :size).by(1)
+      end.to change(ActionMailer::Base.deliveries, :size).by(1)
     end
   end
 

@@ -37,14 +37,18 @@ describe AnswersController do
     context 'user`s own answer' do
       it 'deletes answer' do
         answer
-        expect { delete :destroy, params: { id: answer.id, question_id: question.id }, as: :turbo_stream }.to change(question.answers, :count).by(-1)
+        expect do
+          delete :destroy, params: { id: answer.id, question_id: question.id }, as: :turbo_stream
+        end.to change(question.answers, :count).by(-1)
       end
     end
 
     context 'other user`s answer' do
       it 'doesn`t delete answer' do
         authors_answer
-        expect { delete :destroy, params: {id: authors_answer.id, question_id: question.id} }.to_not change(question.answers, :count)
+        expect do
+          delete :destroy, params: { id: authors_answer.id, question_id: question.id }
+        end.to_not change(question.answers, :count)
       end
     end
   end
@@ -192,12 +196,15 @@ describe AnswersController do
         files: [fixture_file_upload('test_file.txt', 'text/plain')]
       }, question_id: question.id }, as: :turbo_stream
     else
-      post :create, params: { answer: { body: 'Some body', user_id: question.user_id }, question_id: question.id }, as: :turbo_stream
+      post :create, params: {
+        answer: { body: 'Some body', user_id: question.user_id },
+        question_id: question.id
+      }, as: :turbo_stream
     end
   end
 
   def do_invalid_create_request
-    post :create, params: { answer: {body: nil, user_id: question.user_id }, question_id: question.id }
+    post :create, params: { answer: { body: nil, user_id: question.user_id }, question_id: question.id }
   end
 
   def do_edit_request
