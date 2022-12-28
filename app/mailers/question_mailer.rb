@@ -5,9 +5,10 @@ class QuestionMailer < ApplicationMailer
     mail(to: @email, subject: 'Daily question digest')
   end
 
-  def update_mail(user, question)
+  def update_mail(user, question, answer)
     @question = question
     @email = user.email
+    @answer = answer
     mail(to: @email, subject: 'Question update')
   end
 end
