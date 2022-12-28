@@ -17,6 +17,13 @@ RSpec.describe Ability do
     let(:author) { create(:user) }
     let(:question) { create(:question, user_id: author.id) }
     let(:answer) { create(:answer, question_id: question.id, user_id: author.id) }
+    let(:subscription) { question.subscriptions.create(user_id: user.id) }
+
+    context 'for all objects' do
+      subject(:ability) { Ability.new(user) }
+
+      it { should be_able_to :create, Subscription }
+    end
 
     context 'user`s own objects' do
       subject(:ability) { Ability.new(author) }

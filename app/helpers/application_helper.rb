@@ -19,4 +19,8 @@ module ApplicationHelper
 
     object.voted_users.ids.include?(current_user.id)
   end
+
+  def has_subscription?(object)
+    object.subscribed_users.ids.include?(current_user.id)
+  end
 end
