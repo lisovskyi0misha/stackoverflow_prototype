@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
-    @subscription = @question.current_subscription(current_user)
+    @subscription = @question.current_subscription(current_user) if has_subscription?(@question)
   end
 
   def new
