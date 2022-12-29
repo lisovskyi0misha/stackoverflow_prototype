@@ -7,7 +7,7 @@ feature 'subscribe to question', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:just_question) }
-  let(:subscription) { Subscription.create(user_id: user.id, question_id: question.id) }
+  given(:subscription) { create(:subscription, { question:, subscribed_user: user }) }
 
   scenario 'Authenticated user tries to subscribe to question for the first time' do
     login_as(user)

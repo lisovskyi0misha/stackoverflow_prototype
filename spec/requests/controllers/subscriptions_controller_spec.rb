@@ -31,7 +31,7 @@ RSpec.describe 'SubscriptionsController' do
     end
 
     context 'for more then a first time' do
-      let!(:subscription) { question.subscriptions.create(user_id: user.id) }
+      let!(:subscription) { create(:subscription, { question:, subscribed_user: user }) }
 
       it 'doesn`t create subscription' do
         expect { post "/questions/#{question.id}/subscriptions" }.to_not change(question.subscriptions, :count)
@@ -40,8 +40,8 @@ RSpec.describe 'SubscriptionsController' do
   end
 
   describe 'DELETE #destroy' do
-    let!(:subscription) { question.subscriptions.create(user_id: user.id) }
-    let!(:other_subscription) { question.subscriptions.create(user_id: create(:user).id) }
+    let!(:subscription) { create(:subscription, { question:, subscribed_user: user }) }
+    let!(:other_subscription) { create(:subscription, { question:, subscribed_user: create(:user) }) }
 
     it 'finds question' do
       delete "/questions/#{question.id}/subscriptions/#{subscription.id}"
@@ -55,7 +55,11 @@ RSpec.describe 'SubscriptionsController' do
       end
 
       it 'deletes subscription' do
-        expect { delete "/questions/#{question.id}/subscriptions/#{subscription.id}" }.to change(user.subscriptions, :count).by(-1)
+        expect do
+          perform_enqueued_jobs do
+            delete "/questions/#{question.id}/subscriptions/#{subscription.id}" 
+          end
+        end.to change(user.subscriptions, :count).by(-1)
       end
     end
 

@@ -12,7 +12,7 @@ class SubscriptionsController < ApplicationController
     @subscription = Subscription.find(params[:id])
     return unless has_subscription?(@question)
 
-    Subscription.destroy(@subscription.id)
+    UnsubscriptionJob.perform_later(@subscription)
     flash[:success] = 'You`ve been successfully unsubscribed from question'
     redirect_to @question
   end

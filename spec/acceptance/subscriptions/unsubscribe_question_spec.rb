@@ -1,9 +1,9 @@
 require_relative '../acceptance_helper'
 
 feature 'Unsubscribe question' do
-  let(:user) { create(:user) }
-  let(:question) { create(:just_question) }
-  let(:subscription) { Subscription.create(user_id: user.id, question_id: question.id) }
+  given(:user) { create(:user) }
+  given(:question) { create(:just_question) }
+  given(:subscription) { create(:subscription, { question:, subscribed_user: user }) }
 
   scenario 'Subscribed authenticated user tries to unsubscribe from question' do
     login_as(user)
