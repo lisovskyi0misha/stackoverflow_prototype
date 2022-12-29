@@ -11,6 +11,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.build
+    @subscription = @question.current_subscription(current_user)
   end
 
   def new

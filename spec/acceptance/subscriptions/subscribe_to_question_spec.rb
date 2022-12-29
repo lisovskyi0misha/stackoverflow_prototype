@@ -7,27 +7,33 @@ feature 'subscribe to question', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:just_question) }
+  let(:subscription) { Subscription.create(user_id: user.id, question_id: question.id) }
 
   scenario 'Authenticated user tries to subscribe to question for the first time' do
     login_as(user)
     visit question_path(question)
     within '.question' do
-      click_on 'Subscribe'
+      perform_enqueued_jobs do
+        click_on 'Subscribe'
+      end
     end
     expect(page).to have_content('You`ve been succesfully subscribes')
+    expect(page).to have_link('Unsubscribe')
   end
 
   scenario 'Authenticated user tries to subscribe to question for more then the first time' do
     login_as(user)
+    subscription
     visit question_path(question)
     within '.question' do
-      expect(page).to have_button('Subscribe', disabled: false)
+      expect(page).to have_link('Unsubscribe')
     end
   end
   scenario 'Non-authenticated user tries to subscribe to question' do
     visit question_path(question)
     within '.question' do
-      expect(page).to_not have_button('Subscribe')
+      expect(page).to_not have_link('Subscribe')
+      expect(page).to_not have_link('Unsubscribe')
     end
   end
 end

@@ -1,8 +1,8 @@
 %p{ class: 'user_id', id: current_user&.id }
 %div{ class: 'question', id: "question_#{@question.id}" }
-  - if can? :create, Subscription
+  - if can? :create, :destroy, Subscription
     - if has_subscription?(@question)
-      = link_to 'Unsubscribe', question_subscriptions_path(question_id: @question.id), method: :delete, data: { turbo: false }
+      = link_to 'Unsubscribe', question_subscription_path(question_id: @question.id, id: @subscription.id), method: :delete, data: { turbo: false }
     - else
       = link_to 'Subscribe', question_subscriptions_path(question_id: @question.id), method: :post, data: { turbo: false }
   %h1= @question.title

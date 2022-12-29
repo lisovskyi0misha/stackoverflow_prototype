@@ -22,6 +22,10 @@ class Question < ApplicationRecord
     end
   end
 
+  def current_subscription(user)
+    subscriptions.where(user_id: user&.id).first
+  end
+
   private
 
   def subscribe
