@@ -1,0 +1,26 @@
+= bootstrap_form_tag url: search_path, method: :GET do |f|
+  = f.text_field :q, label: 'Search'
+  = f.submit 'Search'
+
+%h3 Users:
+%ul
+  - @results[:users].each do |user|
+    %li= user.email
+
+%h3 Questions:
+%ul
+  - @results[:questions].each do |question|
+    %li= question.title
+    = link_to 'Show', question_path(question)
+
+
+%h3 Answers:
+%ul
+  - @results[:answers].each do |answer|
+    %li= answer.body
+    = link_to 'Show', "#{question_path(id: answer.question_id)}#answer_#{answer.id}"
+
+%h3 Comments:
+%ul
+  - @results[:comments].each do |comment|
+    = render partial: 'comments/comment', locals: { comment: comment, object: comment.commentable }
