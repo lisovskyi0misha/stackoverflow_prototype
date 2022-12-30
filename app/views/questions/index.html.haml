@@ -5,7 +5,7 @@
 
   .search-field
     = search_form_for @q, url: questions_path do |f|
-      = f.label 'Question'
+      = f.label :title_cont, 'Search'
       = f.search_field :title_cont
       = f.submit
   = link_to 'Clear', questions_path, class: 'btn btn-primary'
