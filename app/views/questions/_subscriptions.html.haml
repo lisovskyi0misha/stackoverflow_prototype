@@ -1,0 +1,5 @@
+- if can? :create, :destroy, Subscription
+  - if has_subscription?(@question)
+    = link_to 'Unsubscribe', question_subscription_path(question_id: @question.id, id: @subscription.id), method: :delete, data: { turbo: false }
+  - else
+    = link_to 'Subscribe', question_subscriptions_path(question_id: @question.id), method: :post, data: { turbo: false }
