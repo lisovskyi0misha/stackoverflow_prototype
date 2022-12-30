@@ -14,19 +14,19 @@ describe 'Profiles Controller' do
       it 'renders index template' do
         expect(response).to render_template :index
       end
+    end
 
-      context 'with search' do
-        let!(:user) { create(:user, email: 'ransack@email.com') }
+    context 'with search' do
+      let!(:user) { create(:user, email: 'ransack@email.com') }
 
-        it 'finds all users' do
-          get '/profiles'
-          expect(assigns(:users)).to eq(users << user)
-        end
+      it 'finds all users' do
+        get '/profiles'
+        expect(assigns(:users)).to eq(users << user)
+      end
 
-        it 'searches specific users' do
-          get '/profiles', params: { q: { email_cont: 'ransack' } }
-          expect(assigns(:users)).to eq([user])
-        end
+      it 'searches specific users' do
+        get '/profiles', params: { q: { email_cont: 'ransack' } }
+        expect(assigns(:users)).to eq([user])
       end
     end
   end

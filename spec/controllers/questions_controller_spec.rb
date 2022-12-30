@@ -8,20 +8,37 @@ describe QuestionsController do
   let(:instance) { :question }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2, user_id: user.id) }
-    before { get :index }
+    let!(:questions) { create_list(:question, 2, user_id: user.id) }
 
-    it 'fills array with question objects' do
-      expect(assigns(:questions)).to match_array(questions)
+    context 'without search' do
+      before { get :index }
+
+      it 'fills array with question objects' do
+        expect(assigns(:questions)).to match_array(questions)
+      end
+
+      it 'renders index' do
+        expect(response).to render_template :index
+      end
     end
 
-    it 'renders index' do
-      expect(response).to render_template :index
+    context 'with search' do
+      let!(:question) { create(:question, { user:, title: 'ransack test' }) }
+
+      it 'finds all questions' do
+        get :index
+        expect(assigns(:questions)).to match_array(questions << question)
+      end
+
+      it 'searches for specific question' do
+        get :index, params: { q: { title_cont: 'ransack' } }
+        expect(assigns(:questions)).to match_array([question])
+      end
     end
   end
 
   describe 'GET #show' do
-    let(:answers) { question.answers }
+    let!(:answers) { question.answers }
     before { create_list(:answer, 3, question_id: question.id, user_id: question.user_id) }
     before { get :show, params: { id: question.id } }
 
@@ -35,6 +52,20 @@ describe QuestionsController do
 
     it 'renders show' do
       expect(response).to render_template :show
+    end
+
+    context 'with search' do
+      let!(:answer) { create(:just_answer, { body: 'ransack test', question: }) }
+
+      it 'finds all answers' do
+        get :show, params: { id: question.id }
+        expect(assigns(:answers)).to match_array(answers << answer)
+      end
+
+      it 'finds specific answer' do
+        get :show, params: { id: question.id, q: { body_cont: 'ransack' } }
+        expect(assigns(:answers)).to match_array([answer])
+      end
     end
   end
 
