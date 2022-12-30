@@ -216,8 +216,8 @@ describe QuestionsController do
     post :vote, params: { id: question.id, vote: action }, as: :turbo_stream
   end
 
-  def do_create_request(question, files: false)
-    if files
+  def do_create_request(*args)
+    if args.last
       post :create, params: { question: {
         user_id: user.id,
         body: 'Some body',
