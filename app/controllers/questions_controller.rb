@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @q = Answer.ransack(params[:q])
+    @q = Answer.includes(%i[votes voted_users comments]).where(question_id: @question.id).ransack(params[:q])
     @answer = @question.answers.build
     @answers = @q.result
     @subscription = @question.current_subscription(current_user) if has_subscription?(@question)

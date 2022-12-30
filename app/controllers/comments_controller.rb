@@ -15,12 +15,18 @@ class CommentsController < ApplicationController
   def create
     @comment = current_user.comments.create(comment_params)
     if @comment.valid?
-      ActionCable.server.broadcast("question_#{@question.id}", {object: @comment, type: 'comment'})
+      ActionCable.server.broadcast("question_#{@question.id}", { object: @comment, type: 'comment' })
     else
       @answer = @question.answers.build
       flash[:error] = @comment.errors.full_messages.join(', ')
       render 'questions/show', status: 422
     end
+  end
+
+  def index
+    @commentable_ids = @question.answers.ids << @question.id
+    @q = Comment.where(commentable_id: @commentable_ids).ransack(params[:q])
+    @comments = @q.result
   end
 
   private

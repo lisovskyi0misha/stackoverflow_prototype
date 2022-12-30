@@ -1,0 +1,10 @@
+.comment-card
+  %div{ class: 'card', style: { width: '18rem'} }
+    %ul{ class: 'list-group list-group-flush' }
+      %li{ class: 'list-group-item' }= comment.body
+      - if object.instance_of?(Question)
+        %li{ class: 'list-group-item' }= "For: #{link_to 'Question', question_path(id: object.id)}"
+        %li{ class: 'list-group-item' }= comment.commentable.title
+      - else
+        %li{ class: 'list-group-item' }= "For: #{link_to 'Answer', "#{question_path(id: object.question_id)}#answer_#{object.id}"}"
+        %li{ class: 'list-group-item' }= comment.commentable.body

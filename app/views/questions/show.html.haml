@@ -10,13 +10,19 @@
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
   = render partial: 'questions/comments', locals: { comments: @question.comments }
   = turbo_frame_tag 'question-form' do
-    = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-promary'
+    = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-primary'
+
+  = search_form_for @q, url: question_comments_path(question_id: @question.id) do |f|
+    = f.label 'Search for comment'
+    = f.search_field :body_cont
+    = f.submit 
   
   = search_form_for @q, url: question_path(@question) do |f|
     = f.label 'Search for answer'
     = f.search_field :body_cont
     = f.hidden_field :question_id_eq, value: @question.id
     = f.submit
+
   = link_to 'Clear', question_path(@question), class: 'btn btn-primary'
 
 %h2 Answers:
