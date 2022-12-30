@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     end
   end
   root to: 'questions#index'
+  resources :profiles, only: :index
   resources :questions do
     resources :subscriptions, only: %i[create destroy]
     resources :comments, only: :create
