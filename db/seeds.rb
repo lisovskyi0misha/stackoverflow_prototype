@@ -9,8 +9,8 @@ end
 
 User.create(email: 'test5@email.com', password: '123456', admin: true)
 
-%w[Question1 Question2 Quesiton3 Question4 Quesiton5].each_with do |quesiton|
-  q = Question.create(title: quesiton, body: "Body for #{question}", user_id: User.all[quesiton.last])
+%w[Question1 Question2 Quesiton3 Question4 Quesiton5].each do |question|
+  q = Question.create(title: question, body: "Body for #{question}", user_id: User.all[question.last.to_i - 1].id)
   q.answers.create(body: 'Answer1 body', user_id: User.first.id)
   q.answers.create(body: 'Answer2 body', user_id: User.last.id)
   q.comments.create(body: 'Comment1', user_id: User.all[2])
