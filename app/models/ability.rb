@@ -10,7 +10,9 @@ class Ability
     can :create, :all
     can :update, :all, user: user
     can :destroy, :all, user: user
-    can :choose_best, Answer, question: { user: }
+    can :choose_best, Answer do |a|
+      a.question.user == user
+    end
     can :delete_best, Answer, question: { user: }
     can :vote, :all
     cannot :vote, :all, { user: }

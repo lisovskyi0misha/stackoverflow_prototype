@@ -43,4 +43,10 @@ module AcceptanceMacros
       expect(page).to have_button('Dislike', disabled: disabled)
     end
   end
+
+  def search
+    visit search_path
+    fill_in 'Search', with: 'ransack'
+    click_on 'Search'
+  end
 end

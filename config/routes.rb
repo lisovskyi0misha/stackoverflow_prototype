@@ -14,9 +14,11 @@ Rails.application.routes.draw do
     end
   end
   root to: 'questions#index'
+  resource :search, only: :show
+  resources :profiles, only: :index
   resources :questions do
     resources :subscriptions, only: %i[create destroy]
-    resources :comments, only: :create
+    resources :comments, only: %i[create index]
     get 'comments/:answer_id/new', to: 'comments#new_for_answer', as: :new_answer_comment
     get 'comments/new', to: 'comments#new_for_question', as: :new_comment
     post :vote, on: :member

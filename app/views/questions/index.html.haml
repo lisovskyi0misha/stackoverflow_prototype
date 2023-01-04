@@ -3,6 +3,13 @@
     %p.question-title 
     %p.question-details=link_to 'Details', ''
 
+  .search-field
+    = search_form_for @q, url: questions_path do |f|
+      = f.label :title_cont, 'Search'
+      = f.search_field :title_cont
+      = f.submit
+  = link_to 'Clear', questions_path, class: 'btn btn-primary'
+
   .questions
     -@questions.each do |question|
       %p.question-title=question.title

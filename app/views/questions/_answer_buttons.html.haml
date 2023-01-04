@@ -1,3 +1,4 @@
+-# - binding.break
 - if can? :choose_best, answer
   -if best
     = button_to 'Remove from best', delete_best_question_answer_path(id: answer.id, question_id: answer.question_id), method: :delete, class: 'btn btn-outline-success'

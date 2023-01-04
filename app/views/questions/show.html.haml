@@ -1,10 +1,6 @@
 %p{ class: 'user_id', id: current_user&.id }
 %div{ class: 'question', id: "question_#{@question.id}" }
-  - if can? :create, :destroy, Subscription
-    - if has_subscription?(@question)
-      = link_to 'Unsubscribe', question_subscription_path(question_id: @question.id, id: @subscription.id), method: :delete, data: { turbo: false }
-    - else
-      = link_to 'Subscribe', question_subscriptions_path(question_id: @question.id), method: :post, data: { turbo: false }
+  = render 'subscriptions'
   %h1= @question.title
   = render 'shared/question_votes'
   %p= @question.body
@@ -14,7 +10,21 @@
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
   = render partial: 'questions/comments', locals: { comments: @question.comments }
   = turbo_frame_tag 'question-form' do
-    = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-promary'
+    = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-primary'
+
+  .comment-search
+    = search_form_for @q, url: question_comments_path(question_id: @question.id) do |f|
+      = f.label :body_cont, 'Search for comment'
+      = f.search_field :body_cont
+      = f.submit 
+  .answer-search
+    = search_form_for @q, url: question_path(@question) do |f|
+      = f.label :body_cont, 'Search for answer'
+      = f.search_field :body_cont
+      = f.hidden_field :question_id_eq, value: @question.id
+      = f.submit
+
+  = link_to 'Clear', question_path(@question), class: 'btn btn-primary'
 
 %h2 Answers:
 = render 'questions/empty_answer'
@@ -23,7 +33,7 @@
     = render partial: 'questions/best_answer', locals: {answer: @question.best_answer }
 
 #answers
-  - @question.answers.each do |answer|
+  - @answers.each do |answer|
     - next  if answer == @question.best_answer
     - if answer.id.present?
       = render partial: 'questions/answer', locals: {answer: answer, best: false }
