@@ -9,7 +9,7 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.create(answer_params)
-    respond_with(@answer) { |format| format.html {render 'questions/show', status: 422 } }
+    respond_with(@answer) { |format| format.html { render 'questions/show', status: 422 } }
     ActionCable.server.broadcast("question_#{@question.id}", { object: @answer, type: 'answer' }) if @answer.valid?
   end
 

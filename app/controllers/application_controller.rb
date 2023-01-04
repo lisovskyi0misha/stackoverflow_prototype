@@ -15,4 +15,8 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, notice: exception.message
     end
   end
+
+  def has_subscription?(question)
+    question.subscribed_users.ids.include?(current_user.id)
+  end
 end

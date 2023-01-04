@@ -1,5 +1,10 @@
 %p{ class: 'user_id', id: current_user&.id }
-%div{class: 'question', id: "question_#{@question.id}"} 
+%div{ class: 'question', id: "question_#{@question.id}" }
+  - if can? :create, :destroy, Subscription
+    - if has_subscription?(@question)
+      = link_to 'Unsubscribe', question_subscription_path(question_id: @question.id, id: @subscription.id), method: :delete, data: { turbo: false }
+    - else
+      = link_to 'Subscribe', question_subscriptions_path(question_id: @question.id), method: :post, data: { turbo: false }
   %h1= @question.title
   = render 'shared/question_votes'
   %p= @question.body
@@ -7,7 +12,7 @@
     = render partial: 'shared/file', locals: { file: file.blob }
   - if can? :edit, @question
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
-  = render partial: 'comments', locals: { comments: @question.comments }
+  = render partial: 'questions/comments', locals: { comments: @question.comments }
   = turbo_frame_tag 'question-form' do
     = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-promary'
 
