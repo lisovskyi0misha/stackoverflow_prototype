@@ -42,8 +42,7 @@ gem 'whenever'
 
 gem 'ransack'
 
-gem 'dotenv-rails'
-gem 'dotenv-deployment', require: 'dotenv/deployement'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
