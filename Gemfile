@@ -44,6 +44,12 @@ gem 'ransack'
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
+gem 'omniauth-github'
+
+gem 'omniauth-rails_csrf_protection'
+
+gem 'omniauth-twitter2'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -71,9 +77,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
-  gem 'omniauth-github'
-  gem 'omniauth-rails_csrf_protection'
-  gem 'omniauth-twitter2'
   gem 'rails-controller-testing'
   gem 'responders'
   gem 'rspec-rails'
