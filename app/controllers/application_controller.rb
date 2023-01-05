@@ -1,4 +1,4 @@
-require "application_responder"
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   RESOURCE_MEMBER_LIST = %w[edit update destroy choose_best delete_best vote].freeze
