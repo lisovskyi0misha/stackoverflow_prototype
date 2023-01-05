@@ -52,6 +52,8 @@ gem 'omniauth-twitter2'
 
 gem 'cancancan'
 
+gem 'turbo-rails'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
