@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   def has_subscription?(question)
     return false if current_user.nil?
-    
+
     question.subscribed_users.ids.include?(current_user.id)
   end
 end
