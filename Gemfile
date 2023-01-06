@@ -83,7 +83,6 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'responders'
   gem 'rspec-rails'
-  gem 'turbo-rails'
 end
 
 group :development do
