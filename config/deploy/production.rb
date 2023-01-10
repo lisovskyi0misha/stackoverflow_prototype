@@ -20,7 +20,7 @@ role :web, %w[deployer@165.22.92.62], other_property: :other_value
 role :db,  %w[deployer@165.22.92.62]
 
 set :rails_env, :production
-set :default_env, { path: "/home/deployer/.nvm/versions/node/v16.18.1/bin" }
+set :default_env, { PATH: "/home/deployer/.nvm/versions/node/v16.18.1/bin:/usr/bin" }
 
 
 # Configuration
