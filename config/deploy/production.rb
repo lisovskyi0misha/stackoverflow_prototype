@@ -29,8 +29,6 @@ set :rails_env, :production
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-
-
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
@@ -40,7 +38,7 @@ set :rails_env, :production
 # Global options
 # --------------
 set :ssh_options, {
-  keys: %w[/home/misha/.ssh/digital_oce],
+  keys: %w[/home/misha/.ssh/do_rsa],
   forward_agent: true,
   auth_methods: %w[publickey password]
 }
