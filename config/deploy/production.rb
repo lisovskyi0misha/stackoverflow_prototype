@@ -3,7 +3,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server '167.71.0.99', user: 'deployer', roles: %w[app db web], primary: true
+server '165.22.92.62', user: 'deployer', roles: %w[app db web], primary: true
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
@@ -15,9 +15,9 @@ server '167.71.0.99', user: 'deployer', roles: %w[app db web], primary: true
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-role :app, %w[deployer@167.71.0.99], my_property: :my_value
-role :web, %w[deployer@167.71.0.99], other_property: :other_value
-role :db,  %w[deployer@167.71.0.99]
+role :app, %w[deployer@165.22.92.62], my_property: :my_value
+role :web, %w[deployer@165.22.92.62], other_property: :other_value
+role :db,  %w[deployer@165.22.92.62]
 
 set :rails_env, :production
 
@@ -57,3 +57,15 @@ set :ssh_options, {
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+namespace :deploy do
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Restart mechanism here
+      execute :touch, release_path.join('tmp/restart.txt')
+    end
+  end
+
+  after :publishing, :restart
+end
