@@ -39,6 +39,7 @@ set :rails_env, :production
 # --------------
 set :ssh_options, {
   keys: %w[/home/misha/.ssh/do_rsa],
+  keys_only: true,
   forward_agent: true,
   auth_methods: %w[publickey password]
 }
