@@ -54,6 +54,8 @@ gem 'cancancan'
 
 gem 'turbo-rails'
 
+gem 'redis'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
