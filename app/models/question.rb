@@ -8,10 +8,10 @@ class Question < ApplicationRecord
   belongs_to :user
   has_many_attached :files, dependent: :destroy
   has_many :answers,  dependent: :destroy
-  has_many :comments, as: :commentable
-  has_many :votes, as: :votable
+  has_many :comments, as: :commentable, dependent: :destroy
+  has_many :votes, as: :votable, dependent: :destroy
   has_many :voted_users, -> { distinct }, through: :votes
-  has_many :subscriptions
+  has_many :subscriptions, dependent: :destroy
   has_many :subscribed_users, class_name: 'User', through: :subscriptions
 
   scope :for_the_last_day, -> { where(created_at: Date.yesterday) }

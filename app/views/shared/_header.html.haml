@@ -1,2 +1,10 @@
-= button_to 'Log out', destroy_user_session_path, method: :delete
-= link_to 'See all questions', questions_path
+.header
+  .nav-item
+    = link_to 'See all questions', questions_path, class: 'btn btn-primary'
+  .nav-item
+    = link_to 'Search', search_path, class: 'btn btn-secondary'
+  .nav-item
+    - if current_user
+      = button_to 'Log out', destroy_user_session_path, method: :delete, class: 'btn btn-danger'
+    - else
+      = link_to 'Sign in', new_user_session_path, class: 'btn btn-success'
