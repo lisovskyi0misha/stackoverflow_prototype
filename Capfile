@@ -32,6 +32,7 @@ require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require 'capistrano/sidekiq'
 # require "capistrano/passenger"
 
 after 'deploy:started', 'yarn:install'

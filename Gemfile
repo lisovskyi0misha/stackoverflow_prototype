@@ -90,6 +90,7 @@ group :development do
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rbenv', '~> 2.2'
+  gem 'capistrano-sidekiq', require: false
   gem 'letter_opener'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
