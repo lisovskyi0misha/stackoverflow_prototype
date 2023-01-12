@@ -15,7 +15,7 @@ end
 
 preload_app true
 
-before_work do |server, worker|
+before_fork do |server, worker|
   if defined?(ActibeRecord::Base)
     ActibeRecord::Base.connection.disconnect!
   end
@@ -29,7 +29,7 @@ before_work do |server, worker|
   end
 end
 
-after_work do |server, worker|
+after_fork do |server, worker|
   if defined?(ActibeRecord::Base)
     ActibeRecord::Base.establish_connection
   end
