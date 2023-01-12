@@ -56,7 +56,7 @@ gem 'turbo-rails'
 
 gem 'redis'
 
-gem 'unicorn'
+gem 'unicorn', '~> 5.1'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
