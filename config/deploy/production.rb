@@ -59,15 +59,15 @@ set :ssh_options, {
 #     # password: "please use keys"
 #   }
 
-namespace :deploy do
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Restart mechanism here
-      # execute :touch, release_path.join('tmp/restart.txt')
-      invoke 'unicorn:restart'
-    end
-  end
+# namespace :deploy do
+#   desc 'Restart application'
+#   task :restart do
+#     on roles(:app), in: :sequence, wait: 5 do
+#       # Restart mechanism here
+#       # execute :touch, release_path.join('tmp/restart.txt')
+#       invoke 'unicorn:restart'
+#     end
+#   end
 
-  after :publishing, :restart
-end
+#   after :publishing, :restart
+# end
