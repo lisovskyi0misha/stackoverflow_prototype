@@ -30,3 +30,16 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'tmp/webpack
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+namespace :deploy do
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Restart mechanism here
+      # execute :touch, release_path.join('tmp/restart.txt')
+      invoke 'unicorn:restart'
+    end
+  end
+
+  after :publishing, :restart
+end
