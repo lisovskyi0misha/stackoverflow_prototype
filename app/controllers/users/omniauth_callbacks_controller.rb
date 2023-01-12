@@ -10,13 +10,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
-  def passthru
-    binding.break
-    super
-  end
-
   def twitter2
-    binding.break
     @user = User.from_omniauth(request.env['omniauth.auth'])
     if @user.persisted?
       sign_in_and_redirect @user, event: :authentication
