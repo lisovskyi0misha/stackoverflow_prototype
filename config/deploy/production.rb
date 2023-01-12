@@ -21,8 +21,7 @@ role :db,  %w[deployer@165.22.92.62]
 
 set :rails_env, :production
 set :stage, :production
-set :default_env, { PATH: "/home/deployer/.nvm/versions/node/v16.18.1/bin:/usr/bin" }
-
+set :default_env, { PATH: '/home/deployer/.nvm/versions/node/v16.18.1/bin:/usr/bin' }
 
 # Configuration
 # =============
@@ -65,7 +64,8 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Restart mechanism here
-      execute :touch, release_path.join('tmp/restart.txt')
+      # execute :touch, release_path.join('tmp/restart.txt')
+      invoke 'unicorn:restart'
     end
   end
 

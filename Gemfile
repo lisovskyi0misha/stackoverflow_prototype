@@ -56,6 +56,8 @@ gem 'turbo-rails'
 
 gem 'redis'
 
+gem 'unicorn'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -89,6 +91,7 @@ end
 
 group :development do
   gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano3-unicorn', require: false
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rbenv', '~> 2.2'
