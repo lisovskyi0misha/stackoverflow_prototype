@@ -8,6 +8,7 @@
     = render partial: 'shared/file', locals: { file: file.blob }
   - if can? :edit, @question
     %p= link_to 'Edit', edit_question_path(@question), class: 'btn btn-warning'
+    %p= button_to 'Delete', question_path(@question), class: 'btn btn-danger', method: :delete
   = render partial: 'questions/comments', locals: { comments: @question.comments }
   = turbo_frame_tag 'question-form' do
     = link_to 'Comment', question_new_comment_path(@question), class: 'btn btn-primary'
