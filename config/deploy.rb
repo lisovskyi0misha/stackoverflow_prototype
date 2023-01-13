@@ -40,6 +40,12 @@ namespace :deploy do
       invoke 'unicorn:restart'
     end
   end
-
   after :publishing, :restart
+end
+
+namespace :deploy do
+  task :restart do
+    invoke 'unicorn:legacy_restart'
+  end
+  after 'deploy:publishing', 'deploy:restart'
 end
