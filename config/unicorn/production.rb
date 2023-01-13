@@ -2,7 +2,7 @@ app_path = '/home/deployer/qna'
 working_directory "#{app_path}/current"
 pid               "#{app_path}/current/tmp/pids/unicorn.pid"
 
-listen "#{app_path}/shared/tmp/unicorn.qna.sock", backlog: 64
+listen '/home/deployer/qna/shared/tmp/unicorn.qna.sock', backlog: 64
 
 stderr_path 'log/unicorn.stderr.log'
 stdout_path 'log/unicorn.stdout.log'
