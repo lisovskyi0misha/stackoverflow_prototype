@@ -35,5 +35,5 @@
 
 /node_modules
 
-/config/database.yml.samle
+/config/database.yml
 /config/.env
