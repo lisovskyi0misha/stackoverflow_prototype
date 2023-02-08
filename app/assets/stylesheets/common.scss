@@ -9,12 +9,57 @@
 }
 
 .header {
-  background-color: rgb(243, 241, 241);
+  height: 50px;
+  background-color: rgb(10, 92, 152);
   margin-bottom: 10px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+
+  &-button {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
+}
+
+.search-field {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.type-btn {
+  padding: 4px;
+  text-decoration: none;
 }
 
 .form {
   max-width: 300px;
+
+  &-button {
+    border-radius: 5px;
+    border: solid;
+    border-color: #ffffff;
+    color: #ffffff;
+    background-color: #b3a9a900;
+  }
+
+  &-text {
+    color: #ffffff;
+    font-size: 20px;
+  }
+
+  &-field {
+    background-color: #ffffff;
+    border-radius: 10px;
+    border-color: #b3a9a9;
+    border-width: 2px;
+  }
+}
+
+.page {
+  background-color: black;
+  height: 100vh;
 }

@@ -5,15 +5,21 @@
 
   .search-field
     = search_form_for @q, url: questions_path do |f|
-      = f.label :title_cont, 'Search'
-      = f.search_field :title_cont
-      = f.submit
-  = link_to 'Clear', questions_path, class: 'btn btn-primary'
+      = f.label :title_cont, 'Search for question here', class: 'form-text'
+      = f.search_field :title_cont, class: 'form-field'
+      = f.submit 'Search', class: 'form-button'
+      = link_to 'Clear results', questions_path, class: 'type-btn form-button'
 
-  .questions
+  %table.questions
     -@questions.each do |question|
-      %p.question-title=question.title
-      %p.question-details=link_to 'Details', question_path(id: question.id)
+      %tr.question-line
+        - if question.title.length > 95
+          %td.question-title= question.title[0..92] + '...'
+        -else
+          %td.question-title= question.title
+        %td.question-rate= question.rate
+        %td.question-answers= "Has #{question.answers.count} answer#{question.answers.count == 1 ? '' : 's'}"
+        %td.question-details= link_to 'See more', question_path(id: question.id), class: 'type-btn question-details-button'
 
-= turbo_frame_tag 'create-question-form' do
-  = link_to 'Create Question', new_question_path
+  = turbo_frame_tag 'create-question-form' do
+    = link_to 'Create Question', new_question_path, class: 'type-btn create-question-btn'
